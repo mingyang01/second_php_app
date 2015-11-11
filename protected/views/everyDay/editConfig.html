@@ -1,0 +1,146 @@
+{/include file="layouts/header.tpl"/}
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<script src="/assets/lib/imgAjaxfileUp.js"></script>
+<style>
+.goods-photos {
+  float:left;
+}
+.goods-photos li {
+  width:107px;
+  height:125px;
+  border: 1px solid #ccc;
+  padding:1px;
+}
+
+.goods-photos img {
+  max-width:none;
+}
+
+.sku-error-label {
+  margin-left: 5px;
+  margin-top: 4px;
+  color:#b94a48;
+}
+.upload-img {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.upload-img  input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+</style>  
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li class="active">编辑配置</li>
+          <li class="active">{/$keyInfo['comment']/}</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <p><h3>{/MarketingManager::$marketing_key_map[$keyInfo['key']]/}</h3></p>
+      <p></p>
+      <form id="createForm" class="form-inline" enctype="multipart/form-data"  action="/marketing/saveMarketingConfig" method="post">
+        
+        <input type="hidden" name="key" value="{/$keyInfo['key']/}">
+        
+        <!-- 标题 -->
+        <div class="control-group">
+          <blockquote><p>标题<small>必填</small></p></blockquote>
+          <input autocomplete ="off" class="require input-xxlarge form-control" type="text" name="title"  id="title" value="{/$keyInfo['config']['title']/}">
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 说明 -->
+        <div class="control-group">
+          <blockquote><p>说明<small>选填</small></p></blockquote>
+          <input autocomplete ="off" class="require input-xxlarge form-control" type="text" name="desc"  id="desc" value="{/$keyInfo['config']['desc']/}">
+          <span class="help-inline"></span>
+        </div>
+
+{/*
+        <!-- 连接 -->
+        <div class="control-group">
+          <blockquote><p>跳转连接<small>选填</small></p></blockquote>
+          <input autocomplete ="off" class="require input-xxlarge form-control" type="text" name="link"  id="link" value="{/$keyInfo['config']['link']/}">
+          <span class="help-inline"></span>
+        </div>
+*/}
+        
+        <p></p>
+        <!-- 内容 -->
+        <div class="control-group">
+          <input type="submit" class="btn btn-primary Sub createBtn" value="保存">
+        </div>
+      </form>
+    </div>
+  </div>
+  
+
+</div>
+<script>
+$(function(){
+  $('.datepicker').datepicker({
+      format: "yyyy-mm-dd",
+      autoclose: true
+  }).on('changeDate', function(ev){
+      $(this).datepicker('hide');
+  });
+});
+
+
+$(function(){
+  var isEdit = false;
+  // 表单提交
+  $('#createForm').submit(function(e){
+    e.preventDefault();
+    
+    if ($('.createBtn').hasClass('disabled')) {
+      alert('请稍等，正在保存');
+      return false;
+    }
+    
+    if (!$.trim($('#createForm input[name="title"]').val())) {
+      showError($('#createForm input[name="title"]'), '请填写标题！');
+      return false;
+    }
+    if (!$.trim($('#createForm input[name="desc"]').val())) {
+      showError($('#createForm input[name="desc"]'), '请填写说明！');
+      return false;
+    }
+    
+    $('.createBtn').addClass('disabled');
+    $('#createForm').unbind().submit();
+  });
+});
+
+/**
+ * 显示错误信息
+ */
+function showError(obj, msg)
+{
+  if (obj.length) {
+    var parentObj = obj.closest('.control-group');
+    parentObj.addClass('error').find('.help-inline').text(msg)
+    obj.focus();
+  }
+  return obj;
+}
+</script>
+{/include file="layouts/footer.tpl"/}

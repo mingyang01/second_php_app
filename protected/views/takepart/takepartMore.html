@@ -1,0 +1,41 @@
+{/include file="layouts/header.tpl"/}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" {/if !$searchFilter['type']/}class="active"{//if/}>
+            <a href="/takepart" >单个添加</a>
+          </li>
+          <li role="presentation" {/if $searchFilter['type']/}class="active"{//if/}>
+            <a href="/takepart?type=more" >批量添加</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+        <!-- 活动名称 -->
+        <div class="col-md-4 control-group">
+          <blockquote><p>推IDs(请用回车隔开)<small>必选</small></p></blockquote>
+          <textarea rows="10" cols="70" class="form-control" id="alotids"></textarea>
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 活动标题 -->
+        <div class="col-md-4 control-group">
+          <blockquote><p>折扣价(请与推ID一一对应)<small>选填</small></p></blockquote>
+          <textarea rows="10" cols="70" class="form-control" id="alotprices"></textarea>
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 内容 -->
+        <div class="control-group" style="clear:both;padding-left:15px;">
+          <p></p>
+          <input type="button" class="btn btn-primary Sub createBtn" value="批量报名">
+        </div>
+    </div>
+  </div>
+</div>
+{/include file="layouts/footer.tpl"/}

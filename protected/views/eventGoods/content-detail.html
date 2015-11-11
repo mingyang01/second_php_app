@@ -1,0 +1,93 @@
+<style type="text/css">
+.img {
+height: 200px;
+}
+
+.level {
+    color: #f69;
+    font-size: 18px;
+}
+
+.tool {
+    position: relative;
+    top: 20px;
+    left: 40px;
+}
+
+.btn-danger {
+    background-color: #f46;
+}
+
+
+</style>
+<div class="row" id="box-container">
+    {/foreach from=$data item=item key=key/}
+    <div class="col-md-6">
+        <div data-shop={/$item.shop/} data-gid={/$item.gid/} class="thumbnail" style="height: 350px;">
+            <div style="line-height:24px;height: 30px; border-bottom: solid 1px #ccc; margin-bottom:4px;" class="col-md-12">
+                <strong style="font-size:18px;">{/$CheckTips = CheckTipsManager::$tipsTypeEnum/}
+                {/$CheckTips[$item.audit_status]/} <small>{/$item.gid/}</small></strong>
+                {/if $v.is_danger || $v.is_bad/}<strong style="color:red;">高危商品</strong>{//if/}
+                <span class="level pull-right" style="color: #f69;">&nbsp;&nbsp;{/if $item.level/}{/$item.level/}{//if/}</span>
+            </div>
+            <div style="line-height:24px;height: 30px; border-bottom: solid 1px #ccc; margin-bottom:4px;" class="col-md-12">
+                团购历史：{/html_entity_decode($item.tuan_history)/}
+            </div>
+            <div class="col-md-4" >
+                <div class="img">
+                    <a target="_blank" href="http://www.meilishuo.com/share/item/{/$item.tid/}">
+                    <img data-src="holder.js/100%x200" alt="100%x200" src="{/Yii::app()->image->getWebsiteImageUrl($item.img)/}" data-holder-rendered="true" style="height: 100%; width: 100%; display: block;"></a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h3 style="margin-top:0px;height:35px" id="thumbnail-label">{/$item.name/}</h3>
+                <p>{/$item.tid/}</p>
+                <p style="height: 20px;overflow: hidden;">{/$item.goods_first_catalog/}—{/$item.goods_three_catalog/}</p>
+                <p>销量：{/$item.sale_num/}&nbsp;&nbsp;库存：{/$item.repertory/}</p>
+                <p>
+                    CVR：{/$item.cvr * 100/}
+                </p>
+                <p>流行分：{/$item.popularity_score/}&nbsp;&nbsp;热销分：{/$item.sellrate_score/}</p>
+                <p class="rec_sku">
+                    <span class="price_red">{/$item.price/}</span>
+                    <span class="price">{/$item.origin/}</span>
+                    <span class="price_red pull-right">{/$item.rate * 10/}折</span>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h3 style="margin-top:0px;height:35px" id="thumbnail-label">{/$item.shop_nick/}</h3>
+                <p>{/$item.shop/}</p>
+                <p><div style="width:40px;display:inline-block;">电话:</div>{/$item.partner_tel/}</p>
+                <p>
+                    报名时间：{/current(explode(' ', $item.createTime))/}
+                </p>
+                <p {/if $item.start_time/}style="width:200px;margin-left: -20px;"{//if/}>
+                  <span style="color: red;">排期开始：</span><span class="recommendDateCon">{/if $item.start_time/}{/date("Y-m-d H:i", $item.start_time)/}{//if/}</span>
+                </p>
+                <p {/if $item.start_time/}style="width:200px;margin-left: -20px;"{//if/}>
+                    <span style="color: red;">排期结束：</span><span class="recommendDateCon">{/if $item.end_time/}{/date("Y-m-d H:i", $item.end_time)/}{//if/}</span>
+                </p>
+                {/*
+                <p class="tool" style="width: 170px;left:0;">
+                  {/if $needTool == 1/}
+                    <button data-gid={/$item.gid/} role="button" class="select-box btn btn-warning btnCancelDataOne">退回</button>
+                  {//if/}
+                </p>
+                */}
+            </div>
+            <div style="height: 30px; padding-top:5px;border-top: solid 1px #ccc; padding-bottom:4px;" class="col-md-12">
+              {/if $item.audit_status == 40/}
+                <input class="myDatePickerHMS form-control" name="start_time"  type="text" value="{/if $item.start_time/}{/date("Y-m-d H:i:s", $item.start_time)/}{/elseif $schedule_start_time/}{/$schedule_start_time/}{/elseif $eventInfo.start_time/}{/date("Y-m-d H:i:s", $eventInfo.start_time)/}{//if/}" style="display:inline-block;width:160px;"> - 
+                <input class="myDatePickerHMS form-control" name="end_time"  type="text" value="{/if $item.start_time/}{/date("Y-m-d H:i:s", $item.end_time)/}{/elseif $schedule_end_time/}{/$schedule_end_time/}{/elseif $eventInfo.end_time/}{/date("Y-m-d H:i:s", $eventInfo.end_time)/}{//if/}" style="display:inline-block;margin-right:10px;width:160px;">
+                {/if $eventInfo.status >= 30 && $eventInfo.status < 40/}<input class="form-control input-mini" name="repertory"  type="text" value="" placeholder="库存" style="display:inline-block;margin-right:10px;">{//if/}
+                <button data-gid={/$item.gid/} role="button" class="select-box btn btn-danger btnSaveScheduleOne">确认排期</button>
+              {/elseif $audit_status == 50/}
+                <button data-gid={/$item.gid/} role="button" class="select-box btn btn-danger btnCancelScheduleOne">取消排期</button>
+              {/else/}
+                <p>特别说明：{/$item.comments/}</p>
+              {//if/}
+            </div>
+        </div>
+    </div>
+    {//foreach/}
+</div>

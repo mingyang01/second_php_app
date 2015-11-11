@@ -1,0 +1,107 @@
+{/include file="layouts/header.tpl"/}
+
+<script src="/assets/lib/bufferview.js"></script>
+<div class="container">
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">用户审计</li>
+        </ol>
+        <div id="well" class="well">
+            <form class="form-inline" role="form" id="form">
+                <div  class="form-group  date datepicker">
+                    <input class="form-control" name="from"  type="text" value="{/$from/}"  data-date-format="yyyy-mm-dd">
+                    <span class="glyphicon glyphicon-calendar add-on"></span>  
+                </div>
+                <div  class="form-group  date datepicker">
+                    <input class="form-control" name="to" type="text" value="{/$to/}" data-date-format="yyyy-mm-dd">
+                    <span class="glyphicon glyphicon-calendar add-on"></span>  
+                </div>
+
+                <button id="submit" class="btn btn-default">查看</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table id="tt" title="" style="height:400px"
+                data-options="view:bufferview,rownumbers:true,singleSelect:true,collapsible:false,
+                    method:'get',
+                    remoteSort:false,
+                    multiSort:false,
+                    autoRowHeight:false
+                ">
+            <thead data-options="frozen:true">
+                <tr>
+                    <th data-options="field:'date',width:100">日期</th>
+                    <th data-options="field:'shop'">报名商家</th>
+                    <th data-options="field:'twitter'">报名商品</th>
+                    <th data-options="field:'10'">等待初审</th>
+                    <th data-options="field:'20'">初审成功</th>
+                    <th data-options="field:'21'">初审失败</th>
+                    <th data-options="field:'20'">等待复审</th>
+                    <th data-options="field:'30'">复审成功</th>
+                    <th data-options="field:'31'">复审失败</th>
+                    <th data-options="field:'30'">等待样申</th>
+                    <th data-options="field:'41'">样申失败</th>
+                    <th data-options="field:'40'">等待排期</th>
+                    <th data-options="field:'50'">排期成功</th>
+                    <th data-options="field:'51'">排期失败</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+</div>
+
+<script type="text/javascript">
+
+</script>
+<script>
+    $(function(){
+        $('.datepicker').datepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true
+        }).on('changeDate', function(ev){
+            $(this).datepicker('hide');
+        });
+
+        var url = "/audit/statistic?data=1&from=" + $('[name="from"]').val() + "&to=" + $('[name="to"]').val();
+        $('#tt').datagrid({
+            url: url
+            // , onLoadSuccess: function(){
+
+            // }
+        });
+        // $('#submit').click();
+        $('#form').submit(function(e){
+            e.preventDefault();
+        });
+
+        $('#submit').click(function(e){
+            var url = "/audit/statistic?data=1&from=" + $('[name="from"]').val() + "&to=" + $('[name="to"]').val();
+            e.preventDefault();
+            // $.ajax({
+            //     url: url,
+            //     type: "GET",
+            //     dataType : "json",
+            //     success: function(data) {
+            //         $('#tt').datagrid('loadData', {rows:data, length:data.length});
+            //     },
+            //     async: true
+            // });
+            $('#tt').datagrid({
+                url: url
+                // , onLoadSuccess: function(){
+
+                // }
+            });
+            return false;
+
+        });
+    });
+
+</script>

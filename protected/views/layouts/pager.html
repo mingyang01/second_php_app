@@ -1,0 +1,26 @@
+{/if isset($pager) && $pager && $pager->getPages() > 1/}
+<div class="pages">
+    <div class="total" style="float:left; height:74px;line-height:74px;margin-right:100px;margin-left:20px;">共<strong>{/$pager->getTotal()/}</strong>记录, <strong> {/$pager->getPage()/}/{/$pager->getPages()/}</strong>页, <strong> {/$pager->getListRows()/}</strong>篇每页</div>
+    <ul class="pagination">
+      <li><a href="{/$pager->link($pager->begin())/}">首页</a></li>
+      {/if $pager->getPage() > 1/}
+        <li><a href="{/$pager->link($pager->prev())/}">前一页</a></li>
+      {//if/}
+      {/foreach $pager->pageListArr() as $k=>$v/}
+        {/if $pager->getPage() == $v/}
+          <li class="active">
+            <a href="javascript:void(0);">{/$v/}</a>
+          </li> 
+        {/else/}
+          <li>
+            <a href="{/$pager->link($v)/}">{/$v/}</a>
+          </li>
+        {//if/}
+      {//foreach/}
+      {/if $pager->getPage() < $pager->end()/}
+        <li><a href="{/$pager->link($pager->next())/}">后一页</a></li>
+        <li><a href="{/$pager->link($pager->end())/}">末页</a></li>
+      {//if/}
+    </ul>
+</div>
+{//if/}

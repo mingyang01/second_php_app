@@ -1,0 +1,91 @@
+<div class="row main-font" id="box-container">
+{/foreach from=$shop_info item=item key-key/}
+<div class="col-md-12" style="padding:0px;margin:0px;">
+	<div class="thumbnail" style="height:200px;padding:0px;">
+		<input type="hidden" id="shop_id" value="{/$item.shop_id/}"/>
+		<input type="hidden" id="op_eventid" value="{/$event/}"/>
+	        <div class="col-md-2" style="height:200px; border-right: solid 1px #eee;padding: 0px;margin:0px;">
+	            <p>{/if $item.ka/}<b><font color="red">KA</font></b>{//if/}</p>
+	            <div class="col-md-12" style="margin-top:45px;margin-left:25px;">
+	                <p><a href="http://www.meilishuo.com/shop/{/$item.shop_id/}" target="_blank">{/$item.shop_id/}</a></p>
+	                <p><a href="http://www.meilishuo.com/shop/{/$item.shop_id/}" target="_blank">{/$item.shop_nick/}</a></p>
+	            </div>
+	        </div>
+	        <div class="col-md-8" style="margin-left:0px; padding:0px;">
+	        	<div class="form-group" style="height:50px;margin:0px !important;padding:0px !important;border-bottom: solid 1px #eee;">
+		        	<div class="col-md-3" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+		                主营类目：{/$item.category/}
+		            </div>
+		            <div class="col-md-2" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+		                商家等级：{/$item.level/}
+		            </div>
+		            <div class="col-md-3" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+		                本自然月参加次数：{/$item.had_join_count/}
+		            </div>
+		            <div class="col-md-2" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+		                黄金橱窗位：{/$item.window/}
+		            </div>
+		            <div class="col-md-2">
+		                CS：{/if $item.cs_level/}是{/else/}否{//if/}
+		            </div>
+	            </div>
+	            <div class="form-group" style="height:50px;margin:0px !important;padding:0px !important;border-bottom: solid 1px #eee;">
+		        	<div class="col-md-3" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+		                有理由退款率：{/$item.reason_refund_rate*100/}%
+		            </div>
+		            <div class="col-md-2" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+		                近30天销售量：{/$item.paid_goods_num_30/}
+		            </div>
+		            <div class="col-md-3" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+		                近30天GMV：{/$item.gmv_30/}
+		            </div>
+		            <div class="col-md-2" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+		                近7天销售量：{/$item.paid_goods_num_7/}
+		            </div>
+		            <div class="col-md-2">
+		                近7天GMV：{/$item.gmv_7/}
+		            </div>
+	            </div>
+	            <div class="form-group" style="height:50px;margin:0px !important;padding:0px !important;border-bottom: solid 1px #eee;">
+			        <div class="col-md-3" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+			            转化率：{/$item.shop_buy_rate*100/}%
+			        </div>
+			         <div class="col-md-2" style="height:50px;margin-top:2px;margin-bottom:0px;border-right: solid 1px #eee;">
+			            区域：{/$item.area/}
+			         </div>
+			         <div class="col-md-6" style="height:50px;">
+			             待审核商品数：{/$item.uncheck/}
+			         </div>
+		         </div>
+		         <div class="form-group" style="margin:0px !important;padding:0px !important;border-bottom: solid 1px #eee;">
+			        <div class="col-md-12" style="height:50px;">
+			            历史清仓：{/if $item.history.event_id/}{/$item.history.event_id/}活动在{/$item.history.time/}{//if/}
+			        </div>
+		         </div>
+		     </div>
+	        <div class="col-md-2" style="height:200px; border-left: solid 1px #eee;padding: 0px;margin:0px;">
+	        	<div class="form-group" style="height:145px;margin-right:0px !important;">
+		        	<div class="col-md-12" style="height:135px;margin-top:15px;border-bottom: solid 1px #eee;">
+		                <p>联系方式</p>
+		                <p>QQ：{/$item.partner_qq/}</p>
+			            <p>电话:{/$item.partner_tel/}</p>
+		            </div>
+	            </div>
+	            {/if $realStatus==10/}
+	            <div class="form-group" style="height:55px;margin-left:10px;margin:0px !important;">
+	            	<div class="col-md-6" >
+		                <a id="refuse" style="margin-left:10px" class="pull-right btn btn-default" onclick="refuse('{/$event/}', '{/$item.shop_id/}')" data-toggle="modal" data-target="#failModal">退回</a>
+		            </div>
+		            <div class="col-md-6">
+		                <a id="pass" class="pull-right btn btn-default" data-toggle="modal" onclick="pass('{/$event/}', '{/$item.shop_id/}')" data-target="#passModal">通过</a>
+		            </div>
+	            </div>
+	            {//if/}
+	        </div>
+    	</div>
+  
+</div>
+{/foreachelse/}
+	<div class="col-md-12">没有待审核店铺数据</div>
+{//foreach/}
+</div>

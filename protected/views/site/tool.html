@@ -1,0 +1,141 @@
+{/include file="layouts/header.tpl"/}
+<title>API测试工具</title>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            API测试工具
+        </div>
+        <div style="background-color:#fff7fa;" class="col-md-12">
+            <h3>操作说明</h3>
+            <p>左侧录入系统级输入参数和应用级输入参数后，点击【提交测试】，在右侧查看系统生成的输入参数和返回结果信息。</p>
+        </div>
+    </div>
+    <div class="row" style="padding-top:20px;">
+        <div class="col-md-6">
+            系统级输入参数
+            <form id="params" style="padding-top:20px;" class="form-horizontal">
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Platform</label>
+                    <div class="col-sm-10">
+                        <select id="platform-selector" class="form-control">
+                            <option value="http://virus.meilishuo.com">virus</option>
+                            <option value="http://snake.meilishuo.com">snake</option>
+                            <option value="http://groupon.mlapi.meilishuo.com">团购-snake</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label"></label>
+                    <div class="col-sm-10">
+                        <input type="url" class="form-control" id="platform" value="http://virus.meilishuo.com" placeholder="http://virus.meilishuo.com">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">Method</label>
+                    <div class="col-sm-10">
+                        <select id="method" class="form-control">
+                            <option value="post">post</option>
+                            <option value="get">get</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Interface</label>
+                    <div class="col-sm-10">
+                        <input required id="api" type="text" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">History</label>
+                    <div class="col-sm-10">
+                        <select id="queryHistory" class="form-control">
+                            <option>Interface History</option>
+                        </select>
+                        <p class="help-block">近期测试记录,会保存接口和参数.</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button style="background-color:#474760;border-radius:0px;color:white;" type="submit" class="btn btn-default">提交测试</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            输入参数
+            <form style="padding-top:20px;">
+                <div class="form-group">
+                    <textarea name="params" class="form-control" rows="12"></textarea>
+                </div>
+                返回结果
+                <div style="padding-top:20px;" class="form-group">
+                    <textarea name="results" class="form-control" rows="12"></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $('#platform-selector').change(function(e){
+        $('#platform').val(this.value)
+    });
+    
+    $('#params').submit(function(e){
+        e.preventDefault();
+        var params = {};
+        params.platform = $('#platform').val()
+        params.api = $('#api').val().trim()
+        params.params = $('textarea[name="params"]').val().trim()
+        params.method = $('#method').val()
+
+        // $('textarea[name="results"]').val(JSON.stringify(params))
+        var url = '/tool/apiTest';
+        $.post(url, params, function(data){
+            $('textarea[name="results"]').val(data)
+
+            // 历史记录
+            // begin
+            var history = localStorage.getItem('queryHistory')
+            if (null == history) {
+                history = [];
+            } else {
+                history = JSON.parse(history);
+            }
+
+            history.push({"platform": params.platform, "api": params.api, "params":params.params})
+            localStorage.setItem('queryHistory', JSON.stringify(history))
+
+            // end
+            var markup = '<option data-api="' + params.api + '" data-params="' + params.params + '" data-platform="' + params.platform + '"' +'>' + params.api + '?' + params.params + '</option>'
+            $('#queryHistory').prepend(markup);
+        }, 'text');
+
+
+    });
+    $('#queryHistory').change(function(e){
+        var $history = $(this).find('option:selected')
+        $('#platform').val($history.data('platform'))
+        if (!$history.data('platform')) {
+            $('#platform').val($('#platform-selector').val())
+        }
+        $('#api').val($history.data('api'))
+        $('textarea[name="params"]').val($history.data('params'))
+    });
+    // 加载历史
+    function loadHistory() {
+        var history = localStorage.getItem('queryHistory'),
+            params
+        if (history) {
+            history = JSON.parse(history);
+
+            for (var i = 0; i <history.length; i++) {
+                var params = history[i]
+                var markup = '<option data-api="' + params.api + '" data-params="' + params.params + '" data-platform="' + params.platform + '"' +'>' + params.api + '?' + params.params + '</option>'
+                $('#queryHistory').append(markup);
+            };
+        }
+    }
+
+    loadHistory()
+</script>

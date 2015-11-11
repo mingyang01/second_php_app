@@ -1,0 +1,107 @@
+{/include file="layouts/header.tpl"/}
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+	        <ol class="breadcrumb">
+	            <li><a href="/">运营工具</a></li>
+	            <li class="active">店铺白名单管理</li>
+	        </ol>
+        </div>
+     </div>
+     <div class="row">
+     	<div class="col-md-12">
+		<div id="add_form" class="well">
+			<div class="form-horizontal">
+            	<div class="form-group">
+                    <label class="col-md-1 control-label">店铺ID：</label>
+                    <div class="col-md-3">
+                    	<textarea class="form-control" id="shop_id" name="shop_id" rows="3" placeholder="店铺ID,多个店铺ID之间用|分割"/></textarea>
+                    </div>
+	                	&nbsp;&nbsp;<button id="add" class="btn btn-default">添加店铺白名单</button>
+                </div>
+          	</div>
+        </div>
+        </div>
+    </div>
+    <div class="row">
+    	<div class="col-md-12">
+		<div id="search_form" class="well">
+            <div class="form-horizontal">
+            	<div class="form-group">
+                    <label class="col-md-1 control-label">店铺ID：</label>
+                    <div class="col-md-2">
+                    	<input type="text" value='{/$search_id/}' class="form-control" id="search_id" name="search_id" placeholder="店铺ID"/>
+                    </div>
+                    <label class="col-md-1 control-label">操作人：</label>
+                    <div class="col-md-2">
+                    	<input type="text" value='{/$operate/}' class="form-control" id="operate" name="operate" placeholder="操作人"/>
+                    </div>
+	                	&nbsp;&nbsp;<button id="search_submit" class="btn btn-default">查找</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    <div class="row bodylist">
+    	<div class="col-md-12">
+        <table class="table table-hover table-striped table-bordered table-condensed">
+            <thead>
+                <tr align=center>
+                <th width="8%">店铺ID</th>
+                    <th width="18%">店铺名称</th>
+                    <th width="19%">类目</th>
+                    <th width="10%">地域</th>
+                    <th width="10%">运营人</th>
+                    <th width="10%">操作人</th>
+                    <th width="15%">操作时间</th>
+                    <th width="10%">操作</th>
+                </tr>
+            </thead>
+            {/foreach from=$data item=item key-key/}
+            	<tr>
+                	<td>{/$item.shop_id/}</td>
+                    <td>{/$item.shop_nick/}</td>
+                    <td>{/$item.category/}</td>
+                    <td>{/$item.ear/}</td>
+                    <td>{/$item.admin/}</td>
+                    <td>{/$item.operator/}</td>
+                    <td>{/$item.time/}</td>
+                    <td align=center><a href="javascript:void(0);" onclick="delWihte('{/$item.shop_id/}')">删除</a></td>
+                </tr>
+            {/foreachelse/}
+            	<tr><td colspan="5" align=center>没有数据</td></tr>
+            {//foreach/}
+        </table>
+        </div>
+    </div>
+</div>
+<!--分页-->
+    {/if $total gt 20/}
+    <div class="panel">
+        <div class="panel-body">
+            <div style="text-align:center">
+                <ul class="pagination">
+                    <li><a>共{/$total/}条记录</a></li>
+                    <li><a>总共{/$pageInfo.totalPage/}页</a></li>
+                    <li><a href="{/$pageInfo.firstLink/}">首页</a></li>
+                    {/if $pageInfo.prevPage >= 1/}
+                    <li><a href="{/$pageInfo.prevLink/}">上一页</a></li>
+                    {//if/}
+                    {/foreach from=$pageInfo.pageNumList item=item key=key/}
+                    	{/if $pageInfo.nowPage eq $key/}
+                    		<li><a href="javascript:return false;" class="cur">{/$key/}</a></li>
+                    	{/else/}
+                    		<li><a href="{/$item/}">{/$key/}</a></li>
+                    	{//if/}
+                    {//foreach/}
+                    {/if $pageInfo.nextPage <= $pageInfo.totalPage/}
+                    <li><a href="{/$pageInfo.nextLink/}">下一页</a></li>
+                    {//if/}
+                    <li><a href="{/$pageInfo.lastLink/}">最后一页</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {//if/}  
+  
+<script src="/assets/js/tools/checkwhitelist.js"> </script>

@@ -1,0 +1,98 @@
+<div class="form-group">
+    <label class="col-md-1 control-label">排期状态</label>
+    <div class="col-md-2">
+        {/$categoryInfo = EventGoodsManager::$auditStatusInfo/}
+        <select name="audit_status" class="form-control">
+            {/foreach $categoryInfo as $k=>$v/}
+                <option value="{/$k/}" {/if $audit_status == $k/}selected{//if/}>{/$v/}</option>
+            {//foreach/}
+        </select>
+    </div>
+    <label class="col-md-1 control-label">分配状态</label>
+    <div class="col-md-2">
+        {/$categoryInfo = EventGoodsManager::$statusInfo/}
+        <select name="status" class="form-control">
+            {/foreach $categoryInfo as $k=>$v/}
+                <option value="{/$k/}" {/if $status == $k/}selected{//if/}>{/$v/}</option>
+            {//foreach/}
+        </select>
+    </div>
+    <label class="col-md-1 control-label">价格筛选</label>
+    <div class="col-md-2">
+        {/$priceRangeInfo = OnlineManager::$priceRangeInfo/}
+        <select name="price" class="form-control">
+            <option value="">全部</option>
+            {/foreach $priceRangeInfo as $k=>$v/}
+                <option value="{/$k/}" {/if $price == $k/}selected{//if/}>{/$k/}</option>
+            {//foreach/}
+        </select>
+    </div>
+    <label class="col-md-1 control-label">类目筛选</label>
+    <div class="col-md-2">
+        {/$categoryInfo = OnlineManager::$categoryInfo/}
+        <select name="category" class="form-control">
+            <option value="">全部</option>
+            {/foreach $categoryInfo as $k=>$v/}
+                <option value="{/$k/}" {/if $category == $k/}selected{//if/}>{/$v/}</option>
+            {//foreach/}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-1 control-label">推ID</label>
+    <div class="col-md-2">
+        <input class="form-control" name="twitter_id"  type="text" value="{/$twitter_id/}">
+    </div>
+    <label class="col-md-1 control-label">店铺查询</label>
+    <div class="col-md-2">
+        <input class="form-control" name="shop_val"  type="text" value="{/$shop_val/}">
+    </div>
+    <label class="col-md-1 control-label">店铺类型</label>
+    <div class="col-md-2">
+        <select name="level" class="form-control">
+            <option {/if $level == '#'/}selected{//if/} value="#">不限</option>
+            <option {/if $level == '##'/}selected{//if/} value="##">签约商家</option>
+            <option {/if $level == '0'/}selected{//if/} value="0">普通商家</option>
+            <option {/if $level == '120'/}selected{//if/} value="120">120商家</option>
+            <option {/if $level == '240'/}selected{//if/} value="240">240商家</option>
+            <option {/if $level == '360'/}selected{//if/} value="360">360商家</option>
+            <option {/if $level == '480'/}selected{//if/} value="480">480商家</option>
+            <option {/if $level == '600'/}selected{//if/} value="600">600商家</option>
+        </select>
+    </div>
+    <label class="col-md-1 control-label">是否精品</label>
+    <div class="col-md-2">
+        <select name="isshow_tag" class="form-control">
+            <option {/if $isshow_tag == '#'/}selected{//if/} value="#">全部</option>
+            {/*<option {/if $isshow_tag == '0'/}selected{//if/} value="0">精品</option>
+            <option {/if $isshow_tag == '1'/}selected{//if/} value="1">非精品</option>*/}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label class="col-md-1 control-label">排序</label>
+    <div class="col-md-2">
+        <select  name="order_type" class="form-control">
+            <option value="">默认</option>
+            {/html_options options=SearchManager::$orderInfo selected=$order_type/}
+        </select>
+    </div>
+    <input type="hidden" name="event_id" value="{/$event/}">
+    <input type="hidden" name="schedule_start_time" value="{/$schedule_start_time/}">
+    <input type="hidden" name="schedule_end_time" value="{/$schedule_end_time/}">
+    {/*<input type="hidden" name="debug" value="1">*/}
+    <button style="margin-right: 16px;float: right;" id="exportBtn" type="button" class="btn btn-success">导出 <span class="glyphicon glyphicon-save"></span></button>
+    <button style="float: right;margin-right: 16px;" id="searchSubmit" class="btn btn-default">查看</button>
+</div>
+<script>
+$(function(){
+  // 导出
+  $("#exportBtn").click(function(e){
+    e.stopPropagation
+    e.preventDefault();
+    var excelStr = window.location.href.indexOf('?') == -1 ? '?' : '&';
+    window.open(window.location.href + excelStr + 'excel=1');
+  });
+  
+});
+</script>

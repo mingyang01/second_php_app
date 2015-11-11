@@ -1,0 +1,197 @@
+{/include file="qingcang/layouts/header.tpl"/}
+<script type="text/javascript" src="/assets/lib/bootstrap-datepicker.js"></script>
+<style type="text/css" src="/assets/css/datepicker.css"></style>
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<script src="/assets/lib/bufferview.js"></script>
+<script src="/assets/lib/jquery.pin.js"></script>
+<title>排期</title>
+<style type="text/css">
+	.good_info {
+		background-color: #eee;
+	}
+	.selected {
+		background-color: #eee;
+	}
+	.shselected {
+		background-color: #eee;
+	}
+
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="/">清仓</a></li>
+                <li class="active">排期</li>
+            </ol>
+            <div id="well" class="well">
+			    <form class="form-horizontal" role="form" id="form">
+			    <input value="{/$event/}" type="hidden" class="form-control col-md-2" name="event">
+			        <div class="form-group">
+			        	<label class="col-md-1 control-label">宝贝筛选</label>
+			            <div class="col-md-2">
+			                <input value="{/$twitter/}" type="text" class="form-control col-md-2" name="twitter" placeholder="推ID">
+			            </div>
+			            <label class="col-md-1 control-label">店铺筛选</label>
+			            <div class="col-md-2">
+			                <input value="{/$shop/}" type="text" class="form-control col-md-2" name="shop" placeholder="ID">
+			            </div>
+			            <label class="col-md-1 control-label">一级类目</label>
+			            <div class="col-md-2">
+			                <select style="height:34px;" name="major" class="form-control">
+			                    <option value="0">不限</option>
+			                    <option {/if $catagory == '11801'/}selected{//if/} value="11801">女装</option>
+			                    <option {/if $catagory == '11805'/}selected{//if/} value="11805">女包</option>
+			                    <option {/if $catagory == '11803'/}selected{//if/} value="11803">女鞋</option>
+			                    <option {/if $catagory == '11809'/}selected{//if/} value="11809">家具</option>
+			                    <option {/if $catagory == '11807'/}selected{//if/} value="11807">配饰</option>
+			                    <option {/if $catagory == '12313'/}selected{//if/} value="12313">美妆</option>
+			                    <option {/if $catagory == '12511'/}selected{//if/} value="12511">男装</option>
+			                    <option {/if $catagory == '12591'/}selected{//if/} value="12591">童装</option>
+			                    <option {/if $catagory == '12661'/}selected{//if/} value="12661">食品</option>
+			                </select>
+			            </div>
+			            <label class="col-md-1 control-label">区域</label>
+			            <div class="col-md-2">
+			                <select style="height:34px;" name="area" class="form-control">
+			                    <option value="0">全部</option>
+			                    <option {/if $area == '1'/}selected{//if/} value="1">华东</option>
+			                    <option {/if $area == '3'/}selected{//if/} value="3">华南</option>
+			                    <option {/if $area == '2'/}selected{//if/} value="2">华北</option>
+			                </select>
+			            </div>
+			        </div>
+			        <div class="form-group">
+			        	<label class="col-md-1 control-label">排序</label>
+				        <div class="col-md-2">
+				            <select  name="order_type" class="form-control">
+				               <option value="">默认</option>{/html_options options=SearchManager::$orderInfo selected=$order_type/}
+				          </select>
+				      </div>
+			            <label class="col-md-1 control-label">审核状态</label>
+			            <div class="col-md-2">
+			                <select name="realStatus" class="form-control">
+			                    <option {/if $realStatus == 40/}selected{//if/} value="40">等待</option>
+			                    <option {/if $realStatus == 50/}selected{//if/} value="50">成功</option>
+			                    <option {/if $realStatus == 51/}selected{//if/} value="51">失败</option>
+			                </select>
+			            </div>
+			            <label class="col-md-1 control-label">店铺类型</label>
+			            <div class="col-md-2">
+			                <select name="level" class="form-control">
+			                    <option {/if $level == '#'/}selected{//if/} value="#">不限</option>
+			                    <option {/if $level == '##'/}selected{//if/} value="##">签约商家</option>
+			                    <option {/if $level == '0'/}selected{//if/} value="0">普通商家</option>
+			                    <option {/if $level == '120'/}selected{//if/} value="120">120商家</option>
+			                    <option {/if $level == '240'/}selected{//if/} value="240">240商家</option>
+			                    <option {/if $level == '360'/}selected{//if/} value="360">360商家</option>
+			                    <option {/if $level == '480'/}selected{//if/} value="480">480商家</option>
+			                    <option {/if $level == '600'/}selected{//if/} value="600">600商家</option>
+			                </select>
+			            </div>
+			            <label class="col-md-1 control-label">CS商家</label>
+			            <div class="col-md-2">
+			                <select style="height:34px;" name="cs_level" class="form-control">
+			                    <option {/if $cs_level == '0'/}selected{//if/} value="0">否</option>
+			                    <option {/if $cs_level == '1'/}selected{//if/} value="1">是</option>
+			                </select>
+			            </div>
+			        </div>
+			        <div class="form-group">
+			            <button style="margin-right: 16px;float: right;" id="exportBtn" type="button" class="btn btn-success">导出 <span class="glyphicon glyphicon-save"></span></button>
+			            <button style="margin-right: 16px;float: right;" id="submit" class="btn btn-default">查看</button>
+			        </div>
+			    </form>
+			</div>
+        </div>
+    </div>
+    <div  class="row " >
+        <div class="col-md-12 pinned" style="padding-bottom:10px;">
+            <div style="padding-top:4px;color:#fd6699;font-size:18px">
+                店铺数目:{/$total/}
+            </div>
+        </div>
+    </div>
+    {/include file="qingcang/schedule/schedule-content-detail.html"/}
+    {/if $total> $count*$page/}
+    	<div  class="row" style="height:80px;"><div class="col-md-12" style="text-align:center;"><button id="load" class="col-md-12 btn btn-default">加载更多</button></div></div>
+    {//if/}
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="passModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="passModalLabel">店铺排期</h4>
+      </div>
+      <div class="modal-body editDateCon">
+          <div class="form-group" style="line-height:34px;min-height:34px;">
+              <!-- <label class="col-md-12 control-label">已选择 <span class="selected-count" style="color:red;">0</span> 个商品</label> -->
+	          <div class="col-md-12">
+	              	<label class="col-md-3 control-label">开始时间</label>
+	              <div class="col-md-6">
+	                  <input class="myDatePicker form-control" id="start_time" name="start_time"  type="text" value="" />
+	              </div>
+              </div>
+              <div class="col-md-12">
+	              <label class="col-md-3 control-label">结束时间：</label>
+	          	  <div class="col-md-6">
+	                  <input class="myDatePicker form-control" id="end_time" name="end_time"  type="text" value="" />
+	              </div>
+              </div>
+              <div class="col-md-12">
+	              <label class="col-md-3 control-label">商家标题：</label>
+	          	  <div class="col-md-6">
+	                  <input class="form-control" name="title"  type="text" value="" />
+	              </div>
+              </div>
+          </div>
+          <input type="hidden" id="opt-shop-id" value="" />
+          <input type="hidden" id="opt-event-id" value="" />
+          <div class="form-group" style="line-height:34px;min-height:34px;">
+          	 
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" id="" class="btn btn-primary btnEditRecommendData">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="failModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="failModalLabel">全部退回</h4>
+      </div>
+      <div class="modal-body">
+        {/foreach from=$fail_reason item=item key=key/}
+        <div class="radio">
+            <label>
+                <input type="radio" name="failRadios" value="{/$item.content/}">
+                {/$item.content/}
+            </label>
+        </div>
+        {//foreach/}
+        <input type="hidden" id="opt-shop-id" value="" />
+        <input type="hidden" id="opt-event-id" value="" />
+        <textarea id="failRadiosReason" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button id="submit-fail" type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/qingcang/common.js"></script>
+<script type="text/javascript" src="/assets/js/qingcang/schedule.js"></script>
+{/include file="layouts/footer.tpl"/}

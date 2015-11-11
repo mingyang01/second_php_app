@@ -1,0 +1,46 @@
+{/* 消息提示页面 */}
+{/include file="layouts/header.tpl"/}
+<div id="content" class="span10" style="margin-left:100px;">
+  <div class="pageTit page-header">
+    <h1>提示消息</h1>
+  </div>
+  <div class="msgBox">
+    <div class="message alert alert-{/$type/}" style="height:150px;">
+      <div class="span1" style="padding-top:20px">
+         <img alt="{/$type/}" src="/assets/images/{/$type/}.png">
+      </div>
+      <div class="span8">
+        <div style="margin-left:10px;">
+          <h1>
+            {/$msg/}
+          </h1>
+          <span>
+          {/if $redirect_url/}
+            <a href="{/$redirect_url/}">点击此处跳转</a>（<em id="jumpTime">5</em>秒后自动跳转）
+          {/else/}
+            <a href="javascript:history.back();">返回上一页</a>
+          {//if/}
+          </span>
+          <span>
+              &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; <a href="/">返回主页</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /content -->
+{/if $redirect_url/}
+<script type="text/javascript">
+var time = 5;
+var jumpInterval = setInterval(function(){
+  time--;
+  if (time < 0) time = 0;
+  $("#jumpTime").text(time);
+  if (time == 0) {
+      clearInterval(jumpInterval);
+      location.href = "{/$redirect_url/}";
+  }
+}, 1000);
+</script>
+{//if/}
+{/include file="layouts/footer.tpl"/}

@@ -1,0 +1,144 @@
+{/include file="layouts/header.tpl"/}
+
+<script src="/assets/lib/bufferview.js"></script>
+<div class="container">
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li><a href="/">Home</a></li>
+            <li class="active">审核明细</li>
+        </ol>
+        <div id="well" class="well">
+            <form class="form-inline" role="form" id="form">
+                <div  class="form-group  date datepicker">
+                    <input class="form-control" name="date" type="text" value="{/$date/}" data-date-format="yyyy-mm-dd">
+                    <span class="glyphicon glyphicon-calendar add-on"></span>  
+                </div>
+                <div class="form-group">
+                    <select style="width:170px;" name="step" class="form-control">
+                        <option {/if $step == '2'/}selected{//if/} value="2">初审阶段</option>
+
+                        <option {/if $step == '3'/}selected{//if/} value="3">复审阶段</option>
+
+                        <option {/if $step == '4'/}selected{//if/} value="4">样申阶段</option>
+                    </select>
+                </div>
+                <button id="submit" class="btn btn-default">查看</button>
+                <button id="export" class="btn btn-default">导出</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12"><div id="main" style="height:400px;"></div></div>
+</div>
+
+
+
+</div>
+
+<script type="text/javascript">
+
+</script>
+<script>
+    $(function(){
+        $('.datepicker').datepicker({
+            format: "yyyy-mm-dd",
+            autoclose: true
+        }).on('changeDate', function(ev){
+            $(this).datepicker('hide');
+        });
+
+        $('#form').submit(function(e){
+            e.preventDefault();
+        });
+
+        $('#export').click(function(e){
+            e.stopPropagation
+            e.preventDefault();
+            window.open('/audit/ExportAuditLog?excel=1&' + $('#form').serialize());
+        })
+
+        $('#submit').click(function(e){
+            e.stopPropagation
+            e.preventDefault();
+            window.location = '/audit/ExportAuditLog?' + $('#form').serialize();
+        })
+    });
+
+</script>
+
+<script src="/assets/lib/echarts/echarts.js"></script>
+<script type="text/javascript">
+    require.config({
+        paths: {
+            echarts: '/assets/lib/echarts'
+        }
+    });
+    require(
+        [
+            'echarts',
+            'echarts/chart/line',   // 按需加载所需图表，如需动态类型切换功能，别忘了同时加载相应图表
+            'echarts/chart/bar'
+        ],
+        function (ec) {
+            var myChart = ec.init(document.getElementById('main'));
+            var option = option = {
+                title : {
+                    text: '审核明细',
+                    subtext: ''
+                },
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:['成功','失败', '汇总']
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                calculable : true,
+                xAxis : [
+                    {
+                        type : 'category',
+                        data : ['初审阶段','复审阶段','样申阶段','排期阶段']
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value'
+                    }
+                ],
+                series : [
+                    {
+                        name:'成功',
+                        type:'bar',
+                        data:[{/implode(', ', $statistics[0])/}],
+                    },
+                    {
+                        name:'失败',
+                        type:'bar',
+                        data:[{/implode(', ', $statistics[1])/}],
+                        
+                    },
+                    {
+                        name:'汇总',
+                        type:'bar',
+                        data:[{/implode(', ', $statistics[2])/}],
+                        
+                    }
+                ]
+            };
+                    
+            myChart.setOption(option);
+        }
+    );
+</script>

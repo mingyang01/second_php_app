@@ -1,0 +1,229 @@
+{/include file="layouts/header.tpl"/}
+<script type="text/javascript" src="/assets/lib/bootstrap-datepicker.js"></script>
+<style type="text/css" src="/assets/css/datepicker.css"></style>
+<script src="/assets/lib/bufferview.js"></script>
+<script src="/assets/lib/jquery.pin.js"></script>
+<title>秒杀排期</title>
+<style type="text/css">
+.rec_sku .price {
+    color: #999;
+    text-decoration: line-through;
+    padding-left: 10px
+}
+.rec_sku .price_red {
+    color: #f69;
+    font-size: 16px
+}
+#thumbnail-label {
+    font-size: 16px
+}
+.img {
+    height: 300px;
+}
+.pinActive {
+    box-shadow: 0 10px 6px rgba(0,0,0,.12),0 1px 6px rgba(0,0,0,.12) !important;
+    /*width: 100%!important;*/
+    background-color: white;
+    z-index:999;
+}
+
+.caption > p {
+    white-space: nowrap;
+    /*background-color: lavenderblush;*/
+}
+.select2-selection {
+    height: 34px !important;
+}
+.select2-selection__rendered {
+    height: 34px !important;
+    line-height: 32px !important;
+}
+.nav-tabs a {
+    color: black;
+}
+.tool a, .active a {
+    border: 0px !important;
+    color: white !important;
+    background: #f46 !important;
+    border-radius: 0px !important;
+}
+
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="/">惊喜秒杀</a></li>
+                <li class="active">秒杀排期</li>
+            </ol>
+            {/include file="suprise/search.html"/}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 pinned ">
+            <div role="tabpanel">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    {/foreach from=$area item=item key=key/}
+                    <li data-start="{/$item.stime/}" data-end="{/$item.etime/}" role="presentation" class="supriseTimeList">
+                        <a href="#whole" aria-controls="whole" role="tab" data-toggle="tab">{/$item.area/}</a>
+                    </li>
+                    {//foreach/}
+                    <li class="tool pull-right">
+                        <a id="showSchedule" href="javascript:;"  data-toggle="modal" data-target="scheduleModal">保存</a>
+                    </li>
+                    <li class="tool pull-right">
+                        <a id="showCancelSchedule" href="javascript:;"  data-toggle="modal" data-target="cancelScheduleModal" style="background-color: #f0ad4e !important;border-color: #eea236;">退回</a>
+                    </li>
+                    <li class="tool pull-right">
+                        <a id="search" href="javascript:;" aria-controls="settings">查看</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div  class="row">
+        <div class="col-md-12">
+            <h4 id="tool-tip-count" style="color:#fd6699">商品数目:{/$count/}</h4>
+            <p>提示：先点击选定, 然后保存将添加到对应日期的时间段</p>
+        </div>
+    </div>
+    <div class="row" id="box-contailer">
+        {/foreach from=$data item=item key=key/}
+        <div class="col-md-3 col-sm-4">
+            <div class="thumbnail" data-shop={/$item.shop/} data-gid={/$item.gid/}>
+              <div style="line-height:24px;height: 30px; border-bottom: solid 1px #ccc; margin-bottom:4px;background-color:#ddd;" class="col-md-12">
+                  <label style="width: 100%;"><input type="checkbox" class="listSelect"> 选择</label>
+              </div>
+                <div class="img">
+                    <a target="_blank" href="http://www.meilishuo.com/share/item/{/$item.tid/}">
+                        <img data-src="holder.js/100%x200" alt="100%x200" src="{/Yii::app()->image->getWebsiteImageUrl($item.img)/}" data-holder-rendered="true" style="height: 95%; width: 100%; display: block;">
+                    </a>
+                </div>
+                <div class="caption">
+                    <h3 id="thumbnail-label">{/$item.name/}<a class="anchorjs-link" href="#thumbnail-label"><span class="anchorjs-icon"></span></a><span class="price_red pull-right" style="color: #f69;">{/$item.level/}</span></h3>
+                    <p>{/$item.tid/}@{/$item.shop/}</p>
+                    <p style=" white-space: nowrap;">{/$item.goods_first_catalog/}—{/$item.goods_second_catalog/}—{/$item.goods_three_catalog/}</p>
+                    <p>销量：{/$item.sale_num/}&nbsp;&nbsp;库存：{/$item.repertory/}</p>
+                    <p>
+                        报名时间：{/$item.createTime/}
+                    </p>
+                    <p class="rec_sku">
+                        <span class="price_red">{/$item.price/}</span>
+                        <span class="price">{/$item.origin/}</span>
+                        <span class="price_red pull-right">{/$item.rate * 10/}折</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {//foreach/}
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="scheduleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="passModalLabel">秒杀排期</h4>
+      </div>
+      <div class="modal-body modalCon" style="height:170px;">
+          <div class="form-group" style="line-height:30px;">
+              <label class="col-md-12 control-label">已选择 <span class="selected-count" style="color:red;">0</span> 个商品</label>
+              <label class="col-md-2 control-label">排期时间</label>
+              <div class="col-md-4">
+                  <input readonly class="form-control" name="start_time"  type="text" value="{/$date/}" >
+              </div>
+              <label class="col-md-2 control-label">排期时间</label>
+              <div class="col-md-4">
+                  <input readonly class="form-control" name="end_time"  type="text" value="">
+              </div>
+          </div>
+          <label class="col-md-12 control-label">&nbsp;</label>
+          <div class="form-group" style="line-height:30px;">
+             <label class="col-md-2 control-label">库存限制</label>
+             <div class="col-md-4">
+                 <input type="text" class="form-control" name="repertory" value="100" id="scheduleRepertory">
+             </div>
+             <label class="col-md-2 control-label">商品标签</label>
+             <div class="col-md-4">
+                <select style="height:34px;" name="zdq_type" class="form-control">
+                  {/html_options options=SupriseManager::$zdqTypeInfo/}
+                </select>
+             </div>
+         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary" id="schedule">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="cancelScheduleModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="failModalLabel">全部退回</h4>
+      </div>
+      <div class="modal-body modalCon">
+        <label class="col-md-12 control-label" style="padding-left: 0px;">已选择 <span class="selected-count" style="color:red;">0</span> 个商品</label>
+        {/foreach from=$fail_reason item=item key=key/}
+        <div class="radio">
+            <label>
+                <input type="radio" name="failRadios" value="{/$item.content/}">
+                {/$item.content/}
+            </label>
+        </div>
+        {//foreach/}
+        <textarea id="failRadiosReason" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button id="cancelSchedule" type="button" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+    $('[data-start="{/$from/}"]').addClass('active');
+
+    $('#tool-tip-count').text($('#tool-tip-count').text() + "(" + $('[name="major"] option:selected').text() + "类目)"
+    );
+    $(".pinned").pin({'activeClass': 'pinActive'})
+    
+    $(window).resize(function(e){
+        $(".pinned").pin({'activeClass': 'pinActive'})
+    });
+
+    $('#search').click(function(e){
+        e.preventDefault();
+        var url = '/suprise/schedule?'
+        if (0 == dateChange) {
+            url += 'start=' + 
+            $('.nav-tabs .active').data('start') + '&end=' +
+            $('.nav-tabs .active').data('end') + '&'
+            + $('#form').serialize();
+        };
+
+        url += $('#form').serialize();
+
+        window.location = url;
+        return false;
+    });
+    var dateChange = 0;
+    $('#date').change(function(e) {
+        dateChange = 1;
+    });
+$(function(){
+  $('[name="failRadios"]').change(function(e){
+    $('#failRadiosReason').val(this.value.trim())
+  });
+});
+</script>
+<script src="/assets/js/suprise/suprise.js"></script>
+{/include file="layouts/footer.tpl"/}

@@ -1,0 +1,93 @@
+{/include file="qingcang/layouts/header.tpl"/}
+<script type="text/javascript" src="/assets/lib/bootstrap-datepicker.js"></script>
+<style type="text/css" src="/assets/css/datepicker.css"></style>
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<script src="/assets/lib/bufferview.js"></script>
+<script src="/assets/lib/jquery.pin.js"></script>
+<script language="JavaScript" src="/assets/lib/js/Sortable.js"></script>
+<title>已排期店铺下的商品</title>
+<style type="text/css">
+	
+	.selected {
+		background-color: #eee;
+	}
+	.shselected {
+		background-color: #eee;
+	}
+
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="/">清仓</a></li>
+                <li class="active">已排期店铺下的商品</li>
+            </ol>
+        </div>
+    </div>
+    <div  class="row " >
+        <div class="col-md-12 pinned" style="padding-bottom:10px;">
+            <div style="padding-top:4px;color:#fd6699;font-size:18px">
+              商品数目:{/$total/}
+            </div>
+            <p><a href="#" onclick="javascript:saveShopSort('{/$shop_id/}', '{/$id/}')"><button type="button" class="pull-right btn btn-default">保存排序</button>
+        </div>
+    </div>
+    <div class="row main-font" id="box-container">
+    <div class="col-md-12" style="background-color: #eee">
+		<div class="thumbnail-shop" data-shop="shop-{/$item.shop_id/}" id="good_info">
+			{/foreach from=$data item=item key=key/}
+		    <div class="col-md-6 good_info">
+		        <div data-total="{/$item.total/}" data-shop="good-{/$item.shop_id/}" data-gid="{/$item.gid/}" data-twitter="{/$item.tid/}" class="thumbnail" style="height: 350px;">
+		            <div class="col-md-4" >
+		                <div class="img">
+		                    <a target="_blank" href="http://www.meilishuo.com/share/item/{/$val.tid/}">
+		                    <img data-src="holder.js/100%x200" alt="100%x200" src="{/Yii::app()->image->getWebsiteImageUrl($item.img)/}" data-holder-rendered="true" style="height: 100%; width: 100%; display: block;"></a>
+		                </div>
+		            </div>
+		            <div class="col-md-4" style="padding-right:0px;">
+		                <p><b><a href="http://www.meilishuo.com/share/item/{/$item.twitter_id/}">{/$item.name/}</a></b></p>
+		                <p>{/$item.tid/}</p>
+		                <p style="height: 20px;overflow: hidden;">{/$item.goods_first_catalog/}—{/$item.goods_three_catalog/}</p>
+		                <p>销量：{/$item.sale_num/}&nbsp;&nbsp;库存：{/$item.repertory/}</p>
+		                <p>
+		                    CVR：{/$item.cvr * 100/}
+		                </p>
+		                <p>流行分：{/$item.popularity_score/}&nbsp;&nbsp;热销分：{/$item.sellrate_score/}</p>
+		                <p class="rec_sku">
+		                    <span class="price_red">折扣价：{/$item.price/}</span>
+		                </p>
+		                <p>原价：{/$item.origin/}</p>
+		                <p>折扣：{/$item.rate * 10/}折 &nbsp;&nbsp;美美豆：{/$item.gold.discount/}</p>
+		            </div>
+		            <div class="col-md-4">
+		                <p><b><a href="http://www.meilishuo.com/shop/{/$shop_id/}">{/$item.shop_nick/}</a></b></p>
+		                <p>{/$item.shop/}</p>
+		                <p><div style="width:40px;display:inline-block;">电话:</div>{/$item.partner_tel/}</p>
+		                <p><span style="width:40px;display:inline-block;">QQ:</span>{/$item.partner_qq/}</p>
+		                <p>
+		                    报名时间：{/current(explode(' ', $item.createTime))/}
+		                </p>
+		                <p>
+		                    开始时间：{/$item.start_time|date_format:"%Y-%m-%d %H:%M:%S"/}
+		                </p>
+		                <p>
+		                    结束时间：{/$item.end_time|date_format:"%Y-%m-%d %H:%M:%S"/}
+		                </p>
+		                <p class="tool">
+		                    
+		                </p>
+		            </div>
+		        </div>
+		    </div>
+		    {/foreachelse/}
+				<div class="col-md-12">没有待审核店铺数据</div>
+			{//foreach/} 
+	    </div>
+	</div>
+	 
+</div>
+</div>
+{/include file="layouts/footer.tpl"/}
+<script type="text/javascript" src="/assets/js/qingcang/online.js"></script>

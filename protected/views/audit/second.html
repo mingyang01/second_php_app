@@ -1,0 +1,134 @@
+{/include file="layouts/header.tpl"/}
+<script type="text/javascript" src="/assets/lib/bootstrap-datepicker.js"></script>
+<style type="text/css" src="/assets/css/datepicker.css"></style>
+<script src="/assets/lib/bufferview.js"></script>
+<script src="/assets/lib/jquery.pin.js"></script>
+<title>复审</title>
+<style type="text/css">
+.rec_sku .price {
+    color: #999;
+    text-decoration: line-through;
+    padding-left: 10px
+}
+.rec_sku .price_red {
+    color: #f69;
+    font-size: 16px
+}
+#thumbnail-label {
+    font-size: 16px
+}
+
+.pinActive {
+    box-shadow: 0 10px 6px rgba(0,0,0,.12),0 1px 6px rgba(0,0,0,.12) !important;
+    /*width: 100%!important;*/
+    background-color: white;
+    z-index:999
+}
+
+.caption {
+    /*background-color: lavenderblush;*/
+}
+.select2-selection {
+    height: 34px !important;
+}
+.select2-selection__rendered {
+    height: 34px !important;
+    line-height: 32px !important;
+}
+
+.selected {
+    background-color: #eee;
+}
+
+</style>
+<script>
+window.checkResult = {/$checkResult/}
+</script>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="/">宝贝审核</a></li>
+                <li class="active">复审</li>
+            </ol>
+            {/include file="search/search.html"/}
+        </div>
+    </div>
+    <div  class="row " >
+        <div class="col-md-12 pinned" style="padding-bottom:10px;">
+            <div style="padding-top:4px;color:#fd6699;font-size:18px">
+                <span id="tool-tip-count">
+                商品数目:{/$count/}</span>&nbsp;&nbsp;&nbsp;&nbsp;当前选定:
+                <span id="selected-count">0</span>
+            </div>
+            <p>提示：点击选定，批量通过或者退回
+            {/if $needTool == 1/}
+            <a id="refuse" style="margin-left:10px" class="pull-right btn btn-default" data-toggle="modal" data-target="#failModal">全部退回</a>
+            <a id="pass" class="pull-right btn btn-default" data-toggle="modal" data-target="#passModal">全部通过</a>
+            {//if/}
+            </p>
+            <p style="margin:0;"><label style="color:red;margin:0;">全选 <input type="checkbox" id="checkedAll"></label></p>
+        </div>
+    </div>
+    {/include file="audit/first-content-detail.html"/}
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="passModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="passModalLabel">全部通过</h4>
+      </div>
+      <div class="modal-body">
+        {/foreach from=$pass_reason item=item key=key/}
+        <div class="radio">
+            <label>
+                <input type="radio" name="passRadios" id="optionsRadios1" value="{/$item.content/}">
+                {/$item.content/}
+            </label>
+        </div>
+        {//foreach/}
+        <textarea id="passRadiosReason" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id="submit-pass" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="failModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="failModalLabel">全部退回</h4>
+      </div>
+      <div class="modal-body">
+        {/foreach from=$fail_reason item=item key=key/}
+        <div class="radio">
+            <label>
+                <input type="radio" name="failRadios" value="{/$item.content/}">
+                {/$item.content/}
+            </label>
+        </div>
+        {//foreach/}
+        <textarea id="failRadiosReason" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button id="submit-fail" type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" src="/assets/js/audit/common.js"></script>
+<script type="text/javascript" src="/assets/js/audit/second.js"></script>
+{/include file="layouts/footer.tpl"/}

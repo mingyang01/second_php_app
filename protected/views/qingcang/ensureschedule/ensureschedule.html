@@ -1,0 +1,167 @@
+{/include file="qingcang/layouts/header.tpl"/}
+<script type="text/javascript" src="/assets/lib/bootstrap-datepicker.js"></script>
+<style type="text/css" src="/assets/css/datepicker.css"></style>
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<script src="/assets/lib/bufferview.js"></script>
+<script src="/assets/lib/jquery.pin.js"></script>
+<script language="JavaScript" src="/assets/lib/jquery.sortable.js"></script>
+<title>确认排期</title>
+
+<div class="container">
+	<ol class="breadcrumb">
+       <li><a href="/">Home</a></li>
+       <li><a href="/">清仓</a></li>
+       <li class="active">确认排期</li>
+    </ol>
+    <div class="row well-sm">
+		<div class="col-md-12">
+			<ul class="nav nav-tabs" role="tablist">
+				{/foreach from=$tab item=item key=key/}
+				<li role="presentation" {/$item.class/}>
+					<a href="/qingcang/QensureSchedule/List?type={/$item.id/}"><i class="glyphicon"></i> {/$item.name/}</a>
+				</li>
+				{//foreach/}
+			</ul>
+			<!-- Tab panes -->
+		</div>
+	</div>
+    <div class="well well-sm" style="padding-bottom:10px">
+		<form class="form-horizontal" role="form" id="form">
+			<div class="form-group">
+			     <label class="col-md-1 control-label">店铺筛选</label>
+			     <div class="col-md-2">
+			          <input value="{/$shop/}" type="text" class="form-control col-md-2" name="shop" placeholder="店铺ID">
+			     </div>
+			     <input type="hidden" id="tab_event_id" value="{/$event/}"/>
+			     <input type="hidden" id="tab_shop_id" value="{/$shop/}"/>
+			     <input type="hidden" id="tab_type" value="{/$type/}"/>
+			 <!-- <button style="margin-right: 16px;float: right;" id="exportBtn" type="button" class="btn btn-success">导出 <span class="glyphicon glyphicon-save"></span></button> -->
+			 <button style="margin-right: 16px;float: right;" id="submit" class="btn btn-default">查看</button>
+		 </div>
+	  </form>
+    </div>
+	<div class="col-md-12 pinned" style="padding-bottom:10px;" id="shop_count_op">
+        
+    </div>
+    <div class="col-md-12" style="padding:0px">
+	    <style>
+		    table th{text-align:center}
+		    table td{text-align:center;line-height:220px}
+	    </style>
+        <table class="table table-bordered table-hover">
+			<thead>
+				<tr>
+					<th class="col-md-1">编号</th>
+					<th class="col-md-1">店铺Id</th>
+					<th class="col-md-2">店铺描述&头图</th>
+					<th class="col-md-1">开始-结束</th>
+					<th class="col-md-1">创建时间</th>
+					<th class="col-md-1">修改人</th>
+					<th class="col-md-1">打标</th>
+					<th class="col-md-1">状态</th>
+					{/if $type ==1 || $type ==2 || $type==3 || $type==4/}
+					<th class="col-md-1">商品数</th>
+					{//if/}
+					<th class="col-md-1">标签</th>
+					<th class="col-md-3">操作</th>
+				</tr>
+			</thead>
+			<tbody id="shop_list">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="passModalLabel">店铺信息修改</h4>
+      </div>
+      <div class="modal-body editDateCon" style="height:260px">
+          <div class="form-group" style="line-height:34px;min-height:34px;">
+          		<div class="col-md-12">
+	              <label class="col-md-3 control-label">店铺ID：</label>
+	              <div class="col-md-8">
+	                  <input class="myDatePicker form-control" name="shop_id"  type="text" value="" disabled/>
+	              </div>
+              </div>
+	          <div class="col-md-12">
+	              	<label class="col-md-3 control-label">开始时间：</label>
+	              <div class="col-md-8">
+	                  <input class="myDatePicker form-control" name="start_time" disabled type="text" value="" />
+	              </div>
+              </div>
+              <div class="col-md-12">
+	              <label class="col-md-3 control-label">结束时间：</label>
+	          	  <div class="col-md-8">
+	                  <input class="myDatePicker form-control" name="end_time" disabled type="text" value="" />
+	              </div>
+              </div>
+              <div class="col-md-12">
+	              <label class="col-md-3 control-label">商家标题：</label>
+	          	  <div class="col-md-8">
+	                  <input class="form-control" name="title"  type="text" value="" />
+	              </div>
+              </div>
+              <div class="col-md-12">
+	              <label class="col-md-3 control-label">商家头图：</label>
+	          	  <div class="col-md-8">
+	                  <input class="form-control" name="banner"  type="text" value="" />
+	              </div>
+              </div>
+              <div class="col-md-12">
+	              <label class="col-md-3 control-label">商品打标：</label>
+	          	  <div class="col-md-8">
+	                  <input class="form-control" name="mark"  type="text" value="" />
+	              </div>
+              </div>
+          </div>
+          <input type="hidden" value="" name="id"/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" onclick="SaveUpdate()" class="btn btn-primary btnEditRecommendData">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- tab管理 -->
+<div class="modal fade" id="shopTabModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="passModalLabel">店铺标签管理</h4>
+      </div>
+      <div class="modal-body editDateCon" style="height:180px">
+          <div class="form-group" style="line-height:34px;min-height:34px;">
+          		<div class="col-md-12">
+	              <label class="col-md-3 control-label">店铺ID：</label>
+	              <div class="col-md-8">
+	                  <input class="form-control" name="shop_id"  type="text" value="" disabled/>
+	              </div>
+              </div>
+	          <div class="col-md-12">
+	              	<label class="col-md-3 control-label">店铺标签（最多三个，每行一个）：</label>
+	              <div class="col-md-8">
+	                  <textarea name="shop_tab" class="form-control" style="height:120px"  rows="5" value="" ></textarea>
+	              </div>
+              </div>
+          </div>
+          <input type="hidden" value="" name="id"/>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" onclick="SaveShopTab()" class="btn btn-primary btnEditShopTab">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+{/include file="layouts/footer.tpl"/}
+<script type="text/javascript" src="/assets/js/qingcang/common.js"></script>
+<script type="text/javascript" src="/assets/js/qingcang/ensureschedule.js"></script>

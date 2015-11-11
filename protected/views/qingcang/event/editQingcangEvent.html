@@ -1,0 +1,289 @@
+{/include file="layouts/header.tpl"/}
+<title>编辑活动</title>
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<script src="/assets/lib/imgAjaxfileUp.js"></script>
+<script language="JavaScript" src="/assets/lib/js/Sortable.js"></script>
+
+<style>
+.rec_sku {
+  overflow: hidden;
+  margin: 0 auto;
+  
+}
+.rec_sku li{
+  float: left;
+  display: inline;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 165px;
+  height: 280px;
+  border: 1px solid rgb(29, 148, 242);
+}
+.rec_sku li .s_picBox {
+  height: 200px;
+  width: auto;
+  display: block;
+  overflow: hidden;
+}
+.rec_sku li p {
+  margin: 5px 10px 0 10px;
+}
+
+.deleteGoods {
+  position: relative;
+  top: -18px;
+  right: -140px;
+}
+.rec_sku li .price_red {
+  color: #f69;
+  font-size: 16px;
+}
+.rec_sku li .price {
+  color: #999;
+  text-decoration: line-through;
+  padding-left: 10px;
+}
+.rec_sku li .txt {
+  display: block;
+  height: 18px;
+  line-height: 18px;
+  overflow: hidden;
+  font-size: 14px;
+}
+
+.pcImgs {
+  overflow: hidden;
+  margin: 0 auto;
+  
+}
+.pcImgs li{
+  float: left;
+  display: inline;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.upload-img {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.upload-img  input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.oneTagCon {
+  border: 1px solid #bce8f1;  border-radius: 4px;padding-bottom:5px;margin-bottom:10px;
+}
+.oneTagCon .alert{
+  margin-bottom:0px;border-top:0;border-left:0;border-right:0;
+}
+.tagModuleCon { min-height:100px; }
+</style>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li><a href="/event">主题活动 - 清仓</a></li>
+          <li class="active">编辑活动 - {/$eventInfo['event_name']/}</li>
+      </ol>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+    
+      <form id="createForm" class="form-inline" enctype="multipart/form-data"  action="/event/saveSupriseEvent" method="post">
+        
+        <input type="hidden" name="id" value="{/$tipInfo['id']/}">
+        <input type="hidden" id="eventId" name="event_id" value="{/$eventInfo['event_id']/}">
+        
+        <!-- 活动名称 -->
+        <div class="control-group">
+          <blockquote><p>活动名称<small>必选</small></p></blockquote>
+          <input type="text" class="require input-xlarge form-control" name="event_name" id="event_name" value="{/$eventInfo['event_name']/}">
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 活动标题 -->
+        <div class="control-group">
+          <blockquote><p>活动标题<small>选填</small></p></blockquote>
+          <input type="text" class="require input-xlarge form-control" name="title" id="title" value="{/$eventInfo['title']/}">
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 顶部图片 -->
+        <div class="control-group">
+          <blockquote><p>顶部图片-PC</p></blockquote>
+          <div class="imgbackrgound imgCon" style="height: 100px;width: 750px;line-height:100px;">
+            {/if isset($eventInfo['detail']['top_banner_pc']) && $eventInfo['detail']['top_banner_pc']/}
+              <img src="{/getImageUrl($eventInfo['detail']['top_banner_pc'])/}" style="height: 100px;width: 750px;">
+              <input type="hidden" name="top_banner_pc" value="{/$eventInfo['detail']['top_banner_pc']/}">
+            {/else/}
+              请上传 750*100的图片
+            {//if/}
+          </div>
+          <span class="btn btn-default upload-img btnUploadImg">
+            <input type="file" class="uploadImgInput" name="uploaod_img" id="top_banner_pc_uploaod" onchange="javascript:bannerUpload('top_banner_pc_uploaod', 'top_banner_pc',$(this).parent().prev())">上传
+          </span>
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 手机顶部图片 -->
+        <div class="control-group">
+          <blockquote><p>顶部图片-mob</p></blockquote>
+          <div class="imgbackrgound imgCon" style="height: 170px;width: 320px;line-height:170px;">
+            {/if isset($eventInfo['detail']['top_banner_mob']) && $eventInfo['detail']['top_banner_mob']/}
+              <img src="{/getImageUrl($eventInfo['detail']['top_banner_mob'])/}" style="height: 170px;width: 320px;">
+              <input type="hidden" name="top_banner_mob" value="{/$eventInfo['detail']['top_banner_mob']/}">
+            {/else/}
+              请上传 640*340的图片
+            {//if/}
+          </div>
+          <span class="btn btn-default upload-img btnUploadImg">
+            <input type="file" class="uploadImgInput" name="uploaod_img" id="top_banner_mob_uploaod" onchange="javascript:bannerUpload('top_banner_mob_uploaod', 'top_banner_mob',$(this).parent().prev())">上传
+          </span>
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 内容 -->
+        <div class="control-group">
+          <p></p>
+          <input type="submit" class="btn btn-primary Sub createBtn" value="保存活动信息">
+        </div>
+      </form>
+      
+      <br><br><br>
+      <!-- 聚焦模块 -->
+      <div class="control-group form-inline">
+        <blockquote>
+          <p>商品管理<small><span style="color:red;">注：</span>商品管理与活动基本信息是分开操作的</small></p>
+          <button type="button" class="btn btn-primary btn-sm btnAddTag">添加标签 <i class="glyphicon glyphicon-plus"></i></button>
+        </blockquote>
+        <div class="allTagCon">
+        {/if isset($eventInfo['detail']['tags']) && $eventInfo['detail']['tags']/}
+          {/foreach $eventInfo['detail']['tags'] as $k=>$v/}
+            <div class="oneTagCon" >
+              <div class="alert alert-info">
+                <label>标签名称:</label>
+                <input type="text" class="require input-xlarge form-control" name="tag_name" value="{/$v.tag_name/}">
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;序号:</label>
+                <input type="text" class="require input-mini form-control" name="tag_id" disabled value="{/$k/}">（越小越在前面）
+                <button type="button" class="btn btn-default btn-sm btnHideTag up" style="float:right;"><span>收起标签</span> <i class="glyphicon glyphicon-arrow-down"></i></button>
+                <button type="button" class="btn btn-danger btn-sm btnSaveTag" style="float:right;margin-right:10px;">保存标签信息 <i class="glyphicon glyphicon-ok"></i></button>
+              </div>
+              <div class="add-con-body">
+                  <div class="moduleGoodsAllCon" style="display:block;">
+                      <div class="module-goods-con-header moduleGoodsConHeader">
+                          <label>添加店铺：</label>
+                          <input type="text" class="require input-xxlarge form-control" name="add_goods" style="height:30px;" placeholder="多个店铺id用,分隔">
+                          <button class="btn btn-primary btn-sm btnAddModuleGoods" type="button" data-shopId="0">添加</button>
+                          <button class="btn btn-primary btn-sm btnSaveEventGoodsSort" type="button">保存排序</button>
+                      </div>
+                      <div class="module-goods-con-body moduleGoodsConBody shop_list" style="padding-top:10px;">
+                           {/$eventGoodsList = QeventManager::getEventGoodsList($eventInfo.event_id, $k)/}
+                           {/foreach $eventGoodsList as $goodsKey=>$goodsVal/}
+                           <div class="col-md-12 sort_shop_drg" style="padding:0px;margin:0px;">
+							<div class="well thumbnail-shop moduleGoodsCon">
+								<div class="col-md-12" style="height:40px;padding:0px;margin:0px;">
+		            				<div class="col-md-2"><a href="http://www.meilishuo.com/shop/{/$goodsVal.shop_id/}" target="_blank">店铺ID：{/$goodsVal.shop_id/}</a></div>
+		             				<div class="col-md-3"><a href="http://www.meilishuo.com/shop/{/$goodsVal.shop_id/}" target="_blank">店铺名称：{/$goodsVal.shop_nick/}</a></div>
+		             				<div class="col-md-3"><a href="/qingcang/QensureSchedule/onlineShopGoods?event={/$eventInfo.event_id/}&id={/$goodsVal.id/}" target="_blank">店铺排期商品列表页</a></div>
+		    					</div>
+		    					<ul class="weekessence rec_sku">
+		    					{/foreach $goodsVal.good as $key=>$item/}
+		    					<li class="shopGoodsList" data-grouponId="{/$item.groupon_id/}" data-id="{/$goodsVal.shop_id/}" data-twitterId="{/$item.twitter_id/}">
+		                            <div class="s_picBox">
+		                                 <img src="{/getImageUrl($item['goods_image'],array('s6', '163', '200'))/}" style="margin-left: 0px;">
+		                            </div> 
+		                            <p class="txt">{/$item.goods_name/}</p>
+		                            <p class="price_box">
+		                            	<span class="price_red">{/$item.off_price/}</span>
+		                            	<span class="price">{/$item.off_price + $item.off_num/}</span>
+		                            </p>
+		                            <p class="txt"><span class="listTwitterId">{/$item.twitter_id/}</span></p>
+		                            <a class="glyphicon glyphicon-trash deleteGoods" data-id="{/$item.id/}" data-eventId={/$item.event_id/}></a>
+                           		 </li>
+							    {//foreach/}
+							    </ul>
+						    </div>
+						</div>
+                       {//foreach/}
+                     </div>
+                </div>   
+              </div>
+              <input type="hidden" name="tag_id" value="{/$k/}">
+            </div>
+          {//foreach/}
+        {/else/}
+          <div class="oneTagCon" >
+            <div class="alert alert-info">
+              <label>标签名称:</label>
+              <input type="text" class="require input-xlarge form-control" name="tag_name" value="">
+              <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排序:</label>
+              <input type="text" class="require input-mini form-control" name="tag_sort" value="">(越小越靠前)
+              <button type="button" class="btn btn-default btn-sm btnHideTag up" style="float:right;"><span>收起标签</span> <i class="glyphicon glyphicon-arrow-down"></i></button>
+              <button type="button" class="btn btn-danger btn-sm btnSaveTag" style="float:right;margin-right:10px;">保存标签信息 <i class="glyphicon glyphicon-ok"></i></button>
+              </div>
+            <div class="tagModuleCon">
+              <div class="alert alert-danger tagModuleConTips" style="margin: 5px;display:block;">注意：只有保存标签信息才可以添加模块哦~</div>
+            </div>
+          </div>
+        {//if/}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="appendCon" style="display:none">
+    <div class="aappendOneTagCon">
+      <div class="oneTagCon" >
+        <div class="alert alert-info">
+          <label>标签名称:</label>
+          <input type="text" class="require input-xlarge form-control" name="tag_name" value="">
+          <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;排序:</label>
+          <input type="text" class="require input-mini form-control" name="tag_sort" value="0">(越小越靠前)
+          
+          <button type="button" class="btn btn-default btn-sm btnHideTag up" style="float:right;"><span>收起标签</span> <i class="glyphicon glyphicon-arrow-down"></i></button>
+          <button type="button" class="btn btn-danger btn-sm btnSaveTag" style="float:right;margin-right:10px;">保存标签信息 <i class="glyphicon glyphicon-ok"></i></button>
+        </div>
+        <div class="add-con-body">
+          <div class="alert alert-danger moduleGoodsAllConTips" style="display:block;">注意：只有保存模块信息才可以添加店铺信息哦~</div>
+          <div class="moduleGoodsAllCon" style="display:none;">
+              <div class="module-goods-con-header moduleGoodsConHeader">
+                <label>添加商品：</label>
+                <input type="text" class="require input-xxlarge form-control" name="add_goods" style="height:30px;" placeholder="多个id用,分隔">
+                <button class="btn btn-primary btn-sm btnAddModuleGoods" type="button" data-shopId="0">添加</button>
+                <button class="btn btn-primary btn-sm btnSaveEventGoodsSort" type="button">保存排序</button>
+              </div>
+              <div class="module-goods-con-body moduleGoodsConBody" style="padding-top:10px;">
+                <ul class="weekessence rec_sku moduleGoodsCon">
+                </ul>
+              </div>
+          </div>
+        </div>
+      </div>
+    <li class="shopGoodsList" data-id="918064" data-twitterId="3534936897" data-goodsid="254902619">
+      <div class="s_picBox">
+        <img src="http://d06.res.meilishuo.net//pic/_o/b9/69/47e7efe431e5bdfb87d29bf08225_640_900.ch.png_4d167a26_s2_229_320.jpg" style="margin-left: 0px;">
+      </div> 
+      <p class="txt">高腰牛仔+横条套装</p>
+      <p class="price_box">
+        <span class="price_red">43.80</span>
+        <span class="price">23.0</span>
+      </p>
+      <a class="glyphicon glyphicon-trash deleteGoods" data-twitterId="3534936897"></a>
+    </li>
+    </div>
+</div>
+<script type="text/javascript" src="/assets/js/qingcang/event.js"></script>
+{/include file="layouts/footer.tpl"/}

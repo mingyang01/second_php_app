@@ -1,0 +1,17 @@
+{/include file="layouts/header.tpl"/}
+<table class="table .table-striped">
+<tr>
+	<td width="100px">审核进度</td>
+	<td width="100px">审核时间</td>
+	<td width="100px">原因</td>
+	<td width="100px">审核人</td>
+</tr>
+{/foreach from=$data item=item key=key/}
+<tr>
+	<td>{/$item.status/}</td>
+	<td>{/$item.time/}</td>
+	<td>{/$item.comments/}</td>
+	<td>{/$item.user/}</td>
+</tr>
+{//foreach/}
+</table>

@@ -1,0 +1,216 @@
+{/include file="layouts/header.tpl"/}
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<title>团购-每日必败</title>
+<style type="text/css">
+.price_red {
+    color: #474760;
+    font-size: 16px
+}
+#thumbnail-label {
+    font-size: 16px
+}
+.img {
+    height: 300px;
+}
+.pinActive {
+    box-shadow: 0 10px 6px rgba(0,0,0,.12),0 1px 6px rgba(0,0,0,.12) !important;
+    /*width: 100%!important;*/
+    background-color: white;
+    z-index:999;
+}
+
+.caption > p {
+    white-space: nowrap;
+    /*background-color: lavenderblush;*/
+}
+.select2-selection {
+    height: 34px !important;
+}
+.select2-selection__rendered {
+    height: 34px !important;
+    line-height: 32px !important;
+}
+.nav-tabs a {
+    color: black;
+}
+.tool a, .active a {
+    border: 0px !important;
+    color: white !important;
+    background: #474760 !important;
+    border-radius: 0px !important;
+}
+
+.btnCon .btn {
+  border:0px;
+  border-radius:0px;
+  margin-left:4px;
+}
+
+h3 {
+  margin-top:0px;
+}
+.price {
+    color: #999;
+    text-decoration: line-through;
+    padding-left: 10px;
+}
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li class="active">每日必败</li>
+            </ol>
+        <div id="well" class="well pinned">
+                <form class="form-inline" role="form" id="form">
+                    <div class="form-group">
+                        <label>日期：</label>
+                        <input class="myDatePicker form-control" id="date" name="date"  type="text" value="{/$date/}"  data-date-format="yyyy-mm-dd">
+                    </div>
+                    <button type="submit" class="btn btn-default">查看</button>
+                    
+                      <a class="btn btn-primary" href="/audit/sample?type=1&business=3&event={/$event_id/}" style="float:right;">样核</a>
+                      <a class="btn btn-primary" href="/audit/second?type=1&business=3&event={/$event_id/}" style="float:right;margin-right:10px;">复审</a>
+                      <a class="btn btn-primary" href="/audit/first?type=1&business=3&event={/$event_id/}" style="float:right;margin-right:10px;">初审</a>
+                      
+                </form>
+        </div>
+    </div>
+</div>
+    <div class="row">
+        <div class="col-md-12">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td style="width:150px;">开始时间</td>
+                        <td style="width:150px;">结束时间</td>
+                        <td style="text-align:center">商品杀</td>
+                        <td style="text-align:center" colspan="2">精选</td>
+                    </tr>
+                    {/foreach $time_list as $k=>$v/}
+                    <tr style="height:116px;">
+                        <td style="line-height:100px;">{/$v['start_time']/}</td>
+                        <td style="line-height:100px;">{/$v['end_time']/}</td>
+                        <td>
+                          {/if $v['goods_list'][0]/}
+                          {/$goods_info = $v['goods_list'][0]/}
+                          <div style="height:100px;">
+                            <div style="float:left;">
+                              <a target="_blank" href="http://www.meilishuo.com/share/item/{/$goods_info['tid']/}"><img src="{/Yii::app()->image->getWebsiteImageUrl($goods_info['img'])/}" data-holder-rendered="true"  draggable="false" style="max-height:100px;"></a>
+                            </div>
+                            <div style="margin-left:10px;float:left;">
+                              <h3 id="thumbnail-label">{/$goods_info['name']/}<span class="price_red" style="color: #f69;padding-left:5px;">{/$goods_info['price']/}</span><span class="price" style="padding-left:5px;">{/$goods_info['origin']/}</span> <span class="price_red" style="padding-left:5px;">{/$goods_info['rate'] * 10/}折</span></h3>
+                              <p><span>twitter_id：</span><span>{/$goods_info['tid']/}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>gid：</span><span>{/$goods_info['gid']/}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>shop_id：</span><span>{/$goods_info['shop']/}</span></p>
+                              <p><span>必败理由：</span><span>{/$goods_info['sale_point']/}</span></p>
+                            </div>
+                          </div>
+                          {/else/}
+                          <div style="max-height:100px;" class="addGoodsCon">
+                            <div class="form-inline" style="margin-top:5px;">
+                            <input type="text" class="form-control input-large" placeholder="twitter_id" value="" name="twitter_id">
+                            <input type="text" class="form-control input-xlarge" placeholder="标题 (选填)" value="" name="goods_name" style="width:315px !important">
+                            </div>
+                            <br>
+                            <input type="text" class="form-control input-xxlarge" placeholder="必败理由" value="" name="sale_point">
+                            <input type="hidden" name="start_time" value="{/$v['start_time']/}">
+                            <input type="hidden" name="end_time" value="{/$v['end_time']/}">
+                          </div>
+                          {//if/}
+                        </td>
+                        <td style="line-height:100px;">
+                        {/if $v['goods_list'][0]/}
+                          <a style="margin-left:15px;" href="javascript:;" class="clearData btn btn-warning btn-sm" data-gid={/$goods_info['gid']/}>删除</a>
+                          <a style="margin-left:15px;" href="/goods/editGoods?gid={/$goods_info['gid']/}" target="_blank" class="btn btn-default btn-sm" data-gid={/$goods_info['gid']/}>编辑</a>
+                        {/else/}
+                          <a href="javascript:;" class="saveGoods btn btn-default btn-sm">保存</a>
+                        {//if/}
+                        </td>
+                    </tr>
+                    {//foreach/}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+  /** 选择时间 */
+  $('.myDatePicker').on('focus',function(){
+    WdatePicker({
+        dateFmt:'yyyy-MM-dd'
+    });
+  });
+  
+  $(".saveGoods").click(function(){
+    if ($(this).hasClass("disabled")) return false;
+    var thisObj = $(this);
+    var goodsConObj = thisObj.closest("tr").find(".addGoodsCon");
+    
+    var twitterId = goodsConObj.find("input[name='twitter_id']").val();
+    var salePoint = goodsConObj.find("input[name='sale_point']").val();
+    var startTime = goodsConObj.find("input[name='start_time']").val();
+    var endTime   = goodsConObj.find("input[name='end_time']").val();
+    var goodsName = goodsConObj.find("input[name='goods_name']").val();
+    
+    if (!twitterId) {
+      alert('请输入twitter_id');
+      return false;
+    }
+    if (!salePoint) {
+      alert('请输入必败理由');
+      return false;
+    }
+    
+    var postData = {'twitter_id':twitterId, 'sale_point':salePoint, 'start_time':startTime, 'end_time':endTime, 'goods_name':goodsName};
+    var objInHtml = thisObj.html();
+    setBtnStatus(thisObj, '提交中...', 'disabled');
+    $.post('/everydayRecommend/saveEverydayRecommendGoods', postData, function(json){
+      if (json.succ == 1) {
+        window.location.reload();
+        setBtnStatus(thisObj, objInHtml, 'succ');
+      } else {
+        alert(json.msg);
+        setBtnStatus(thisObj, objInHtml, 'succ');
+      }
+    },'json').error(function(code, data){
+      alert('遇到服务器错误');
+      setBtnStatus(thisObj, objInHtml, 'succ');
+    });
+  });
+  
+  
+  /**
+   * 取消排期
+   */
+  $(".clearData").click(function(){
+    if ($(this).hasClass("disabled")) return false;
+    var thisObj = $(this);
+    var tuanId  = thisObj.attr("data-gid");
+    if (!tuanId) {
+      alert('商品id不存在');
+      return false;
+    }
+    if (confirm("您确定要取消排期吗？") == false) {
+      return false;
+    }
+    
+    var postData = {'tuan_id':tuanId};
+    var objInHtml = thisObj.html();
+    setBtnStatus(thisObj, '提交中...', 'disabled');
+    $.post('/schedule/cancelSchedule', postData, function(json){
+      if (json.succ == 1) {
+        window.location.reload();
+        setBtnStatus(thisObj, objInHtml, 'succ');
+      } else {
+        alert(json.msg);
+        setBtnStatus(thisObj, objInHtml, 'succ');
+      }
+    },'json').error(function(code, data){
+      alert('遇到服务器错误');
+      setBtnStatus(thisObj, objInHtml, 'succ');
+    });
+  });
+});
+</script>
+{/include file="layouts/footer.tpl"/}

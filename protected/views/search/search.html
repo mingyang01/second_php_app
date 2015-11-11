@@ -1,0 +1,197 @@
+<link href="/assets/lib/select2.min.css" rel="stylesheet" />
+<script src="/assets/lib/select2.min.js"></script>
+<style type="text/css">
+.time-label {
+    color: red;
+}
+</style>
+<div id="well" class="well">
+    <form class="form-horizontal" role="form" id="form">
+        <div class="form-group">
+            <label class="col-md-1 control-label">宝贝筛选</label>
+            <div class="col-md-2">
+                <input value="{/$twitter/}" type="text" class="form-control col-md-2" name="twitter" placeholder="宝贝">
+            </div>
+            <label class="col-md-1 control-label">店铺筛选</label>
+            <div class="col-md-2">
+                <input value="{/$shop/}" type="text" class="form-control col-md-2" name="shop" placeholder="店铺">
+            </div>
+            <label class="col-md-1 control-label"><span class="time-label">{/if $step == 5 and $status == 1/}排期{/else/}报名{//if/}</span>开始</label>
+            <div class="col-md-2">
+                <input class="picker form-control" id="date" name="from"  type="text" value="{/$from/}"  data-date-format="yyyy-mm-dd">
+            </div>
+            <label class="col-md-1 control-label"><span class="time-label">{/if $step == 5 and $status == 1/}排期{/else/}报名{//if/}</span>结束</label>
+            <div class="col-md-2">
+                <input class="picker form-control" id="date" name="to"  type="text" value="{/$to/}"  data-date-format="yyyy-mm-dd">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-1 control-label">审核进度</label>
+            <div class="col-md-2">
+                <select data-limit="{/$limit/}" name="step" class="form-control">
+                    <option {/if $step == 1/}selected{//if/} value="1">不限</option>
+                    <option {/if $step == 2/}selected{//if/} value="2">初审</option>
+                    <option {/if $step == 3/}selected{//if/} value="3">复审</option>
+                    <option {/if $step == 4/}selected{//if/} value="4">样审</option>
+                    <option {/if $step == 5/}selected{//if/} value="5">排期</option>
+                </select>
+            </div>
+            <label class="col-md-1 control-label">审核状态</label>
+            <div class="col-md-2">
+                <select name="status" class="form-control">
+                    <option {/if $status == 0/}selected{//if/} value="0">等待</option>
+                    <option {/if $status == 1/}selected{//if/} value="1">成功</option>
+                    <option {/if $status == 2/}selected{//if/} value="2">失败</option>
+                </select>
+            </div>
+
+            <label class="col-md-1 control-label">商品分类</label>
+            <div class="col-md-2">
+                <select style="height:34px;" name="major" class="form-control">
+                    <option value="0">不限</option>
+                    <option {/if $catagory == '11801'/}selected{//if/} value="11801">女装</option>
+                    <option {/if $catagory == '11805'/}selected{//if/} value="11805">女包</option>
+                    <option {/if $catagory == '11803'/}selected{//if/} value="11803">女鞋</option>
+                    <option {/if $catagory == '11809'/}selected{//if/} value="11809">家具</option>
+                    <option {/if $catagory == '11807'/}selected{//if/} value="11807">配饰</option>
+                    <option {/if $catagory == '12313'/}selected{//if/} value="12313">美妆</option>
+                    <option {/if $catagory == '12511'/}selected{//if/} value="12511">男装</option>
+                    <option {/if $catagory == '12591'/}selected{//if/} value="12591">童装</option>
+                    <option {/if $catagory == '12661'/}selected{//if/} value="12661">食品</option>
+                    <option {/if $catagory == '12803'/}selected{//if/} value="12803">童鞋</option>
+                    <option {/if $catagory == '12763'/}selected{//if/} value="12763">男鞋</option>
+                    <option {/if $catagory == '12843'/}selected{//if/} value="12843">男包</option>
+                    <option {/if $catagory == '13097'/}selected{//if/} value="13097">数码小家电</option>
+                </select>
+            </div>
+            <label class="col-md-1 control-label">末级分类</label>
+            <div class="col-md-2">
+                <select name="end-major" class="form-control" data-value="{/$endCatagory/}">
+                    <option value="0">不限</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-1 control-label">是否精品</label>
+            <div class="col-md-2">
+                <select name="isshow_tag" class="form-control">
+                    <option {/if $isshow_tag == '#'/}selected{//if/} value="#">全部</option>
+                    <option {/if $isshow_tag == '0'/}selected{//if/} value="0">精品</option>
+                    <option {/if $isshow_tag == '1'/}selected{//if/} value="1">非精品</option>
+                </select>
+            </div>
+        
+            <label class="col-md-1 control-label">店铺类型</label>
+            <div class="col-md-2">
+                <select name="level" class="form-control">
+                    <option {/if $level == '#'/}selected{//if/} value="#">不限</option>
+                    <option {/if $level == '##'/}selected{//if/} value="##">签约商家</option>
+                    <option {/if $level == '0'/}selected{//if/} value="0">普通商家</option>
+                    <option {/if $level == '120'/}selected{//if/} value="120">120商家</option>
+                    <option {/if $level == '240'/}selected{//if/} value="240">240商家</option>
+                    <option {/if $level == '360'/}selected{//if/} value="360">360商家</option>
+                    <option {/if $level == '480'/}selected{//if/} value="480">480商家</option>
+                    <option {/if $level == '600'/}selected{//if/} value="600">600商家</option>
+                </select>
+            </div>
+            <label class="col-md-1 control-label hidden">商品类型</label>
+            <div class="col-md-2 hidden">
+                <select name="type" class="form-control">
+                    {/if $business != 3/}<option {/if $type == '0'/}selected{//if/} value="0">普通团购</option>{//if/}
+                    <option {/if $type == '1'/}selected{//if/} value="1">团购活动</option>
+                </select>
+            </div>
+
+            <label {/if $type == '0'/}style="display:none;"{//if/} class="event col-md-1 control-label hidden">活动ID</label>
+            <div {/if $type == '0'/}style="display:none;"{//if/} class="event col-md-2 hidden">
+                <input value="{/$event/}" type="text" class="form-control col-md-2" name="event">
+            </div>
+            
+            <label class="col-md-1 control-label">排序</label>
+            <div class="col-md-2">
+                <select  name="order_type" class="form-control">
+                    <option value="">默认</option>
+                    {/html_options options=SearchManager::$orderInfo selected=$order_type/}
+                </select>
+            </div>
+            
+            <input type="hidden" name='business' value="{/$business/}">
+            <input type="hidden" name='channel' value="{/$channel/}">
+            <input type="hidden" name='business_type' value="{/$business_type/}">
+        </div>
+        <div class="form-group">
+            <button style="margin-right: 16px;float: right;" id="exportBtn" type="button" class="btn btn-success">导出</button>
+            <button style="margin-right: 16px;float: right;" id="submit" class="btn btn-default">查看</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+$('.picker').datepicker({
+    format: "yyyy-mm-dd",
+    autoclose: true
+}).on('changeDate', function(ev){
+    $(this).datepicker('hide');
+});
+
+$('[name="end-major"]').select2();
+
+$('[name="type"]').change(function(e){
+    if (this.value == '0') {
+        $('.event').hide();
+        $('[name="event"]').val(0)
+    } else {
+        $('.event').show();
+    }
+});
+
+$('[name="step"]').change(function(e){
+    if (this.value == 5 && $('[name="status"]').val() == 1) {
+        $('.time-label').text('排期');
+    } else {
+        $('.time-label').text('报名');
+    }
+});
+
+$('[name="status"]').change(function(e){
+    if (this.value == 1 && $('[name="step"]').val() == 5) {
+        $('.time-label').text('排期');
+    } else {
+        $('.time-label').text('报名');
+    }
+});
+
+
+$('[name="major"]').change(function(e){
+    console.log(this.value);
+    $.get('/audit/endCatagory', {'cid': this.value}, function(data){
+        $('[name="end-major"]').select2({
+            data:data.data
+        });
+
+        var tpl = '<option value="0" selected>不限</option> ';
+        $('[name="end-major"]').html(tpl)
+        $.each(data.data,function(i,info){
+            tpl+="<option value='" + info.id + "'>"+info.text
+            + "</option>";
+        })
+
+        $('[name="end-major"]').html(tpl);
+        $('[name="end-major"]').val($('[name="end-major"]').data('value')).change()
+        }, 'json');
+});
+$('[name="major"]').change();
+
+if ($('[name="step"]').data('limit')) {
+    $('[name="step"]').html($('[name="step"] option:selected'))
+}
+
+$(function(){
+  // 导出
+  $("#exportBtn").click(function(e){
+    e.stopPropagation
+    e.preventDefault();
+    var excelStr = window.location.href.indexOf('?') == -1 ? '?' : '&';
+    window.open(window.location.href + excelStr + 'excel=1');
+  });
+});
+</script>

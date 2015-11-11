@@ -1,0 +1,179 @@
+{/include file="layouts/header.tpl"/}
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<script src="/assets/lib/imgAjaxfileUp.js"></script>
+<style>
+.goods-photos {
+  float:left;
+}
+.goods-photos li {
+  width:107px;
+  height:125px;
+  border: 1px solid #ccc;
+  padding:1px;
+}
+
+.goods-photos img {
+  max-width:none;
+}
+
+.sku-error-label {
+  margin-left: 5px;
+  margin-top: 4px;
+  color:#b94a48;
+}
+.upload-img {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.upload-img  input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+em {
+    font-style: inherit;
+}
+</style>  
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li class="active">编辑清仓报名规则</li>
+      </ol>
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-md-12">
+          <div role="tabpanel">
+              <ul class="nav nav-tabs" role="tablist">
+                  {/foreach $rule_category_map as $k=>$v /}
+                  <li role="presentation" {/if $category == $k/}class="active"{//if/} data-date="{$k}">
+                      <a href="/tuanRule/qingcangRule?category={/$k/}" >{/$v/}</a>
+                  </li>
+                  {//foreach/}
+              </ul>
+          </div>
+      </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <form id="createForm" class="form-inline" enctype="multipart/form-data"  action="/goods/saveGoods" method="post">
+        
+        {/foreach $rule_list as $k=>$v/}
+          <div class="control-group">
+            <blockquote><p><span class="ruleTip">{/$v['comment']/}</span><small>必填</small></p></blockquote>
+            {/if $v['key'] == 'groupon_shop_ka_list'/}
+              <textarea class="require form-control ruleContent" type="text" name="{/$v['key']/}"  id="{/$v['key']/}" style="width:700px;height:200px;">{/$v['value']/}</textarea>
+            {/else/}
+              <input autocomplete ="off" class="require input-xlarge form-control ruleContent" type="text" name="{/$v['key']/}"  id="{/$v['key']/}" value="{/$v['value']/}">
+            {//if/}
+            <button type="button" class="btn btn-primary Sub btnSaveRuleOne">修改</button>
+            <span class="help-inline"></span>
+            
+            <label style="margin-left:50px;" class="invalidCon">（<span class="title">{/if $v['invalid'] == 1/}<em style='color:red;'>已生效</em>{/else/}<em>未生效</em>{//if/}</span>） &nbsp;<button type="button" class="btn btn-warning btn-sm btnEditInvalid" data-key="{/$v['key']/}">修改</button></label>
+          </div>
+        {//foreach/}
+
+        <p></p>
+        <!-- 内容 -->
+        <div class="control-group">
+          {/*<input type="submit" class="btn btn-primary Sub createBtn" value="保存">*/}
+        </div>
+      </form>
+    </div>
+  </div>
+  
+
+</div>
+<script>
+$(function(){
+  $(".btnSaveRuleOne").click(function(){
+    if ($(this).hasClass("disabled")) return false;
+    var thisObj = $(this);
+    var ruleObj = thisObj.closest(".control-group").find(".ruleContent");
+    var ruleValue   = ruleObj.val();
+    var ruleName    = ruleObj.attr("name");
+    var ruleTips    = thisObj.closest(".control-group").find(".ruleTip").html();
+    
+    if (confirm("您确定要将 "+ruleTips+" 规则修改为 "+ruleValue+" ？请谨慎操作，修改后将直接影响商家后台团购报名。") == false) {
+      return false;
+    }
+    
+    var objInHtml = thisObj.html();
+    setBtnStatus(thisObj, '提交中...', 'disabled');
+    var url = '/tuanRule/saveNormalRule';
+    $.post(url, {'rule_key': ruleName, 'rule_value': ruleValue}, function(json){
+        if (json.succ == 1) {
+           alert('修改成功')
+        } else {
+           alert(json.msg);
+        }
+        setBtnStatus(thisObj, objInHtml, 'succ');
+    }, 'json').error(function(code,data){
+        alert('系统出错了~');
+        setBtnStatus(thisObj, objInHtml, 'succ');
+    });
+  });
+  
+  $(".btnEditInvalid").click(function(){
+    if ($(this).hasClass("disabled")) return false;
+    var thisObj = $(this);
+    var ruleKey = thisObj.attr("data-key");
+    var ruleObj = thisObj.closest(".invalidCon");
+    var ruleTips = thisObj.closest(".control-group").find(".ruleTip").html();
+    
+    if (!ruleKey) {
+      alert('规则不存在');
+      return false;
+    }
+    
+    if (confirm("您确定要修改 "+ruleTips+" 的状态吗？请谨慎操作!") === false) {
+      return false;
+    }
+    
+    var objInHtml = thisObj.html();
+    setBtnStatus(thisObj, '提交中...', 'disabled');
+    var url = '/tuanRule/editRuleInvalid';
+    $.post(url, {'rule_key': ruleKey}, function(json){
+        if (json.succ == 1) {
+           // alert('修改成功');
+           if (json.invalid == 1) {
+             ruleObj.find(".title").html("<em style='color:red;'>已生效</em>");
+           } else {
+             ruleObj.find(".title").html("<em>未生效</em>");
+           }
+        } else {
+           alert(json.msg);
+        }
+        setBtnStatus(thisObj, objInHtml, 'succ');
+    }, 'json').error(function(code,data){
+        alert('系统出错了~');
+        setBtnStatus(thisObj, objInHtml, 'succ');
+    });
+  });
+})
+
+/**
+ * 显示错误信息
+ */
+function showError(obj, msg)
+{
+  if (obj.length) {
+    var parentObj = obj.closest('.control-group');
+    parentObj.addClass('error').find('.help-inline').text(msg)
+    obj.focus();
+  }
+  return obj;
+}
+</script>
+{/include file="layouts/footer.tpl"/}

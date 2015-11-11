@@ -1,0 +1,171 @@
+{/include file="layouts/header.tpl"/}
+<script src="/assets/lib/ueditor/editor_all.js"></script>
+<script src="/assets/lib/ueditor/editor_config.js"></script>
+<style>
+.container{
+  /*font-size:12px;*/
+}
+</style>
+<style>
+.goods-photos {
+  float:left;
+}
+.goods-photos li {
+  width:107px;
+  height:125px;
+  border: 1px solid #ccc;
+  padding:1px;
+}
+
+.goods-photos img {
+  max-width:none;
+}
+
+.sku-error-label {
+  margin-left: 5px;
+  margin-top: 4px;
+  color:#b94a48;
+}
+
+</style>  
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li><a href="/notice">公告管理</a></li>
+          <li class="active">{/if $notice_info/}编辑公告{/else/}添加公告{//if/}</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form id="createForm" class="form-inline" enctype="multipart/form-data"  action="/notice/saveNotice" method="post">
+        
+        <input type="hidden" name="id" value="{/$notice_info['id']/}">
+        <!-- 分类 -->
+        <div class="control-group">
+          <blockquote><p>分类</p></blockquote>
+            <select name="cate_id" id="cate_id" class="form-control input-medium">
+              {/html_options options=NoticeManager::$notice_cate_id_map selected="{/$notice_info['cate_id']/}"/}
+            </select>
+          <span class="help-inline"></span>
+        </div>
+
+        <!-- 标题 -->
+        <div class="control-group">
+          <blockquote><p>标题<small>必填</small></p></blockquote>
+          <input autocomplete ="off" class="require input-xxlarge form-control" type="text" name="title"  id="title" value="{/$notice_info['title']/}">
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 作者 -->
+        <div class="control-group">
+          <blockquote><p>作者<small>必填</small></p></blockquote>
+          <input autocomplete ="off" class="require input-medium form-control" type="text" name="author"  id="author" value="{/$notice_info['author']/}">
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 时间  -->
+        <div class="control-group">
+          <blockquote><p>时间<small>必填</small></p></blockquote>
+          <input class="require input-medium form-control date datepicker" type="text" name="ctime"  id="ctime" value="{/if $notice_info['ctime'] && $notice_info['ctime'] != '00-00-00 00:00:00'/}{/date('Y-m-d', strtotime($notice_info['ctime']))/}{//if/}" data-date-format="yyyy-mm-dd">
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 展示控制 -->
+        <div class="control-group">
+          <blockquote><p>展示控制<small>必选</small></p></blockquote>
+            <select name="status" id="status" class="form-control input-medium">
+              {/html_options options=NoticeManager::$notice_status_map selected="{/$notice_info['status']/}"/}
+            </select>
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 内容 -->
+        <div class="control-group">
+          <blockquote><p>内容</p><small>必填</small></blockquote>
+          <textarea class="require" name="content" id="postEdit">{/$notice_info['content']/}</textarea>
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 内容 -->
+        <div class="control-group">
+          <input type="submit" class="btn btn-primary Sub createBtn" value="添加">
+        </div>
+      </form>
+    </div>
+  </div>
+  
+
+</div>
+<script>
+$(function(){
+  $('.datepicker').datepicker({
+      format: "yyyy-mm-dd",
+      autoclose: true
+  }).on('changeDate', function(ev){
+      $(this).datepicker('hide');
+  });
+  
+  UE.getEditor('postEdit',{
+      autoClearinitialContent:false,
+      wordCount:true,
+      elementPathEnabled:false,
+      initialFrameHeight:300,
+      zIndex:0,
+      maximumWords: 99999,
+  });
+});
+
+
+$(function(){
+  var isEdit = false;
+  // 表单提交
+  $('#createForm').submit(function(e){
+    e.preventDefault();
+    
+    if ($('.createBtn').hasClass('disabled')) {
+      alert('请稍等，正在保存');
+      return false;
+    }
+    
+    if (!$.trim($('#createForm input[name="title"]').val())) {
+      showError($('#createForm input[name="title"]'), '请填写标题！');
+      return false;
+    }
+    
+    if (!$('#createForm select[name="status"]').val()) {
+      showError($('#createForm select[name="status"]'), '请选择展示分类！');
+      return false;
+    }
+    
+    if (!$('#createForm input[name="ctime"]').val()) {
+      showError($('#createForm input[name="ctime"]'), '请选时间！');
+      return false;
+    } 
+    
+    if (!$.trim($('#createForm select[name="cate_id"]').val()) && !isEdit) {
+      showError($('#createForm select[name="cate_id"]'), '请选择分类！');
+      return false;
+    }
+    UE.getEditor('postEdit').sync();
+    $('.createBtn').addClass('disabled');
+    $('#createForm').unbind().submit();
+  });
+});
+
+/**
+ * 显示错误信息
+ */
+function showError(obj, msg)
+{
+  if (obj.length) {
+    obj.siblings('.help-inline').text(msg).closest('.control-group').addClass('error');
+    obj.focus();
+  }
+  return obj;
+}
+</script>
+{/include file="layouts/footer.tpl"/}

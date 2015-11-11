@@ -1,0 +1,168 @@
+{/include file="layouts/header.tpl"/}
+<link rel="stylesheet" href="/assets/css/recommend.css" />
+{/*<link rel="stylesheet" href="/assets/css/recommend-base.css" />*/}
+<script src="/assets/lib/jquery-1.7.1.min.js"></script>
+<script src="/assets/js/recommend.js"></script>
+<script src="/assets/lib/js/jquery.lazyload.js"></script>
+<script src='/assets/lib/js/Sortable.js'></script>
+<script src='/assets/js/admin.js'></script>
+<style>
+.deleteRecommend {
+    position: relative;
+    top: -29px;
+    right: -140px;
+}
+.navFixed {
+  position: fixed;
+  top: 0px;
+}
+</style>
+<div class="container">
+  <div class="row" style="width: 1170px;">
+    <div class="col-md-12" style="padding:0;">
+      <ol class="breadcrumb">
+        <li><a href="/">Home</a></li>
+        <li class="active">人工干预</li>
+      </ol>
+    </div>
+  </div>
+  
+  <div class="container tab-pane active well" role="tabpanel" id="tableshow">
+    <ul class="weekessence rec_sku" id="recommendBox">
+      {/if $recommendTwitterList/}
+        {/foreach $recommendTwitterList as $k=>$v/}
+          <li class="recommendList recommendList{/$v.id/}"  data-Id="{/$v.id/}" data-twitterId="{/$v.twitter_id/}" data-goodsId="{/$v.goods_id/}">
+            <div class="s_picBox">
+              <img src="http://d06.res.meilishuo.net/{/$v.goods_image_pc/}">
+            </div> 
+            <p class="txt">{/$v.goods_name/}</p>
+            <p class="price_box">
+              <span class="price_red">{/$v.off_price/}</span>
+              <span class="price">{/$v.off_num/}</span>
+            </p>
+            <p>{/$v.end_time|date_format:"%Y-%m-%d %H:%M"/}</p>
+            <a class="glyphicon glyphicon-trash deleteRecommend recommended" data-twitterId="{/$v.twitter_id/}"></a>
+          </li>
+        {//foreach/}
+      {//if/}
+    </ul>
+    <div class="recommendBtnBox">
+      <a class="btn btn-small btn-info" id="recommendBtn" href="javascript:void(0);">一键推荐</a>
+      <span style="margin-left:10px;"><em style="color:red;">注</em>：拖动图片可以排序哦</span>
+    </div>
+  </div>
+
+{/*
+<div class="row fixedNav">
+    <div class="col-md-12">
+        <div role="tabpanel">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist" style="float:left;">
+              {/foreach $cataArr as $k=>$v /}
+                <li role="presentation" {/if $k == 0/}class="active"{//if/}>
+                    <a class="link cicon {/if $k == 0/}light_{/$v.en_title/}{/else/}{/$v.en_title/}{//if/}" data-enTitle="{/$v.en_title/}" data-cataId="{/$k/}" href="javascript:;">
+                      <span class="ctitle">{/$v.title/}</span>
+                    </a>
+                </li>
+              {//foreach/}
+            </ul>
+            <div class="fixedRecommendBtnBox" style="float:right;">
+              <a class="btn btn-small btn-info" id="recommendBtn" href="javascript:void(0);">一键推荐</a>
+              <span style="margin-left:10px;"><em style="color:red;">注</em>：拖动图片可以排序哦</span>
+            </div>
+        </div>
+    </div>
+</div>
+*/}
+
+<div id="m_ca" style="height: {/*102px*/}50px;">
+  <div class="f_container">
+    <div class="c_content scrollout"> 
+      <div class="classify"> 
+        <ul class="c_menu"> 
+          {/foreach $cataArr as $k=>$v/}
+            <li class="{/if $k == 0/}tab_active{//if/}">
+              <a class="link cicon {/if $k == 0/}light_{/$v.en_title/}{/else/}{/$v.en_title/}{//if/}" data-enTitle="{/$v.en_title/}" data-cataId="{/$k/}" href="javascript:;">
+                <span class="ctitle">{/$v.title/}</span>
+              </a>
+            </li>
+          {//foreach/}
+        </ul>
+      </div>
+    </div>
+    {/*
+    <div class="range" style="width: 1140px;">
+      <div class="er_l t_tuan">
+        <span class="r_title">今日<label class="red">团购</label></span><span class="r_dec">共有<lable class="p_total twitterListTotalNum">{/count($twitterList)/}</lable>件优质商品</span>
+        <span style="margin-left:20px;"><input type="text" class="" id="searchTwitter" placeholder="请输入id搜索"><button type="button" class="btn btn-info btn-xs" id="searchTwitterBtn">搜索</button></span>
+      </div>
+      <ul style="list-style: none;">
+        {/foreach $sbaseArr as $k=>$v/}
+          <li class="sbaseBtn {/if $k == 0/}active{//if/}" data-sbaseId="{/$k/}">
+            <a href="javascript:;">{/$v/}
+            {/if $k != 0/}<i class="arrow_d sortType">&nbsp;</i>{//if/}</a>
+            <span class="special">|</span>
+          </li>
+        {//foreach/}
+      </ul>
+    </div>
+    <div class="clear_f"></div> <!--排序结束-->
+    */}
+  </div>
+</div>
+
+
+  <div class="container table-bordered" style=" margin-bottom:50px;"> 
+    <div class="row" id="chartshow">
+      <div class="dataBox">
+        <ul class="weekessence rec_sku" id="twitterContent">
+          {/$twitterNum = 0/}
+          {/foreach $twitterList as $k=>$v/}
+             <li class="twitterList twitterList{/$v.id/}" data-Id="{/$v.id/}" data-twitterId="{/$v.twitter_id/}" data-goodsId="{/$v.goods_id/}">
+               <div class="s_picBox">
+                 {/if $twitterNum < 10/}
+                   <img src="http://d06.res.meilishuo.net/{/$v.goods_image_pc/}">
+                 {/else/}
+                   <img class="lazy" src="/assets/images/gray.gif" data-original="http://d06.res.meilishuo.net/{/$v.goods_image_pc/}" style="min-height:198px; max-height:267px;">
+                 {//if/}
+               </div> 
+               <p class="txt">
+                 {/$v.goods_name/}
+               </p>
+               <p class="price_box">
+                 <span class="price_red">{/$v.off_price/}</span>
+                 <span class="price">{/$v.off_num/}</span>
+               </p>
+               <p>{/$v.end_time|date_format:"%Y-%m-%d %H:%M"/}</p>
+             </li>
+             {/$twitterNum = $twitterNum+1/}
+          {//foreach/}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{/*<span class="goTop go-top-box" style="display: none; z-index: 1000;"></span>*/}
+<script>
+$(function() {
+    /* $('.datepicker').datepicker({
+        format: "yyyy-mm-dd",
+        autoclose: true
+    }).on('changeDate', function(ev){
+        $(this).datepicker('hide');
+    }); */
+    
+    /** 延时加载图片 */
+    $("img.lazy").lazyload({
+        //effect : "fadeIn"
+    });
+    
+    /** 推荐位移动 */
+    var moveRecommend = document.getElementById("recommendBox");
+    new Sortable(moveRecommend);
+    
+    /** 返回顶部 */
+    //goTopEx($(".goTop")[0]);
+});
+</script>
+{/include file="layouts/footer.tpl"/}

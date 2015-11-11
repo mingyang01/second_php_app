@@ -1,0 +1,135 @@
+{/include file="layouts/header.tpl"/}
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<title>修改排期</title>
+<style type="text/css">
+.form-group {
+    margin-bottom: 0px !important;
+}
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="/">工具</a></li>
+                <li class="active">修改排期，请谨慎操作</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <h4>Twitter_id <small>用逗号分隔</small></h4>
+            <textarea class="form-control" rows="8" id="twitter_ids"></textarea>
+            <h4>groupon_id <small>用逗号分隔,必须与twitter_id一一对应</small></h4>
+            <textarea class="form-control" rows="8" id="groupon_ids"></textarea>
+        </div>
+    </div>
+
+    <div class="row" style="margin-top:20px;margin-bottom:20px;line-height: 34px;text-align: right;">
+      <div class="form-group dataFilter">
+          <label class="col-md-1 control-label">团购类型</label>
+          <div class="col-md-2">
+              <select name="campaign_type" class="form-control">
+                  <option value="2">普通团购</option>
+                  <option value="10">秒杀</option>
+                  <option value="15">清仓</option>
+                  <option value="16">长期活动</option>
+              </select>
+          </div>
+          <label class="col-md-1 control-label">库存</label>
+          <div class="col-md-1">
+              <input value="" type="text" class="form-control" name="repertory">
+          </div>
+      </div>
+    </div>
+    
+    <div class="row" style="margin-top:20px;margin-bottom:20px;line-height: 34px;text-align: right;">
+      <div class="form-group dataFilter">
+          <label class="col-md-1 control-label">开始时间</label>
+          <div class="col-md-2">
+              <input value="" type="text" class="form-control col-md-2 myDatePicker" name="start_time">
+          </div>
+          <label class="col-md-1 control-label">结束时间</label>
+          <div class="col-md-2">
+              <input value="" type="text" class="form-control col-md-2 myDatePicker" name="end_time">
+          </div>
+          <label class="col-md-1 control-label">预热时间</label>
+          <div class="col-md-2">
+              <input value="" type="text" class="form-control col-md-2 myDatePicker" name="preheat_time">
+          </div>
+          <input value="1" type="hidden" class="form-control" name="platform">
+          <button style="float: right;margin-right: 16px;" id="updateSubmit" type="button" class="btn btn-default">一键排期</button>
+      </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12">
+            <h4>返回结果：</h4>
+            <textarea class="form-control" rows="20" id="resultCon">{/$campaign/}</textarea>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+  /** 选择时间 */
+  $('body').on('focus', '.myDatePicker',function(e){
+    WdatePicker({
+        dateFmt:'yyyy-MM-dd HH:00:00',
+        minDate:'%y-%M-%{%d}'
+    });
+  });
+  
+  $("#updateSubmit").click(function(){
+    if ($(this).hasClass("disabled")) return false;
+    var thisObj = $(this);
+    
+    var twitterIds   = $("#twitter_ids").val();
+    var grouponIds   = $("#groupon_ids").val();
+    var campaignType = $(".dataFilter").find("select[name='campaign_type']").val();
+    var startTime    = $(".dataFilter").find("input[name='start_time']").val();
+    var endTime      = $(".dataFilter").find("input[name='end_time']").val();
+    var preheatTime  = $(".dataFilter").find("input[name='preheat_time']").val();
+    var platform     = $(".dataFilter").find("input[name='platform']").val();
+    var repertory    = $(".dataFilter").find("input[name='repertory']").val();
+    
+    if (!platform) {
+      alert('请不要非法操作');
+      return false;
+    }
+    if (!campaignType) {
+      alert('请选择正确的团购类型');
+      return false;
+    }
+    if (!twitterIds) {
+      alert('请传入twitter_id');
+      return false;
+    }
+    if (!grouponIds) {
+      alert('请传入groupon_id');
+      return false;
+    }
+    
+    if (!confirm('您确定要这样操作吗？')) {
+      return false;
+    }
+    
+    postData = { 'start_time':startTime, 'end_time':endTime, 'preheat_time':preheatTime,'groupon_ids':grouponIds, 'twitter_ids':twitterIds, 'campaign_type':campaignType, 'platform':platform, 'repertory':repertory };
+    var objInHtml = thisObj.html();
+    setBtnStatus(thisObj, '提交中...', 'disabled');
+    $.post('/qatest/saveSchedule', postData, function(json){
+      if (json.succ == 1) {
+        $("#resultCon").val(json.result_msg);
+      } else {
+        alert(json.msg);
+      }
+      setBtnStatus(thisObj, objInHtml, 'succ');
+    },'json').error(function(code,data){
+      alert('遇到服务器错误');
+      setBtnStatus(thisObj, objInHtml, 'succ');
+    });
+    
+  });
+})
+</script>
+{/include file="layouts/footer.tpl"/}

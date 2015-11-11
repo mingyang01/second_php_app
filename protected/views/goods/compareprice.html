@@ -1,0 +1,26 @@
+<div  style="width:500px;">
+    {/if $data.flag eq '1'/}
+    <h4>同款比价</h4>
+    <div class="well clearfix">
+        <div class="col-sm-6">
+            <p>同款中的最低价：<span style="color:red;">{/$data.data.price/}</span></p>
+            <p>区域：{/$data.data.partner_area/}</p>
+            <p>同款数量：{/$data.data.count/}</p>
+        </div>
+        <div class="col-sm-6">
+            <p>低价的推id：{/$data.data.tid/}</p>
+            <p>最低价活动：<span style="color:red;">暂无</span></p>
+        </div>
+        <div class="col-sm-12">
+            <p>店铺/id：{/$data.data.shop_nick/}/{/$data.data.shop_id/}</p>
+        </div>
+        <div class="col-sm-12 text-right">
+            <a class="btn btn-default detail-btn" href='/goods/comparePriceDetail?tid={/$data.data.tid/}' target="_blank" >详情</a>
+        </div>
+    </div>
+    {/else/}
+    <div class="alert alert-warning">
+        {/$data.data/}
+    </div>
+    {//if/}
+</div>

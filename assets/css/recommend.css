@@ -1,0 +1,570 @@
+
+.top_mlsslide {
+    width:100%;
+    position:relative;
+    height:340px
+}
+.top_mlsslide .mlsslide_img li {
+    width:100%;
+    height:340px;
+    position:absolute;
+    cursor:pointer;
+    background-position:center top;
+    background-repeat:no-repeat;
+    opacity:0;
+    filter:alpha(opacity=0);
+    display:none
+}
+.top_mlsslide .mlsslide_img li a {
+    display:block;
+    width:100%;
+    height:340px
+}
+.top_mlsslide .mlsslide_tit {
+    width:950px;
+    margin-left:auto;
+    margin-right:auto;
+    top:308px;
+    z-index:30;
+    position:relative;
+    height:32px;
+    overflow:hidden;
+    white-space:nowrap
+}
+.top_mlsslide .mlsslide_tit li {
+    float:left;
+    line-height:32px;
+    font-size:12px;
+    color:#fff;
+    text-align:center;
+    cursor:pointer;
+    margin-left:1px;
+    background:rgba(0, 0, 0, 0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#80000000', endColorstr='#80000000')
+}
+.top_mlsslide .mlsslide_tit .slide_tit_active {
+    background:rgba(255, 43, 114, 0.5);
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#80ff2b72', endColorstr='#80ff2b72')
+}
+.top_mlsslide .mlsslide_tit .firLi {
+    margin-left:0
+}
+.body {
+    width:1200px;
+    position:relative;
+    background-color:#fff
+}
+.body .fl_1 {
+    width:229px;
+    float:left;
+    margin-right:13px;
+    margin-bottom:13px
+}
+.body .fl_1 .new-png {
+    position:absolute;
+    top:0
+}
+.body .fl_1 .soldout {
+    width:76px;
+    height:77px;
+    background:url("http://i.meilishuo.net/css/images/doota/huodong/shareact/soldout.png") no-repeat 0 0;
+    _background:0;
+    _filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://i.meilishuo.net/css/images/doota/huodong/shareact/soldout.png', sizingMethod='scale');
+    position:absolute;
+    top:-1px;
+    left:-1px;
+    z-index:100
+}
+.body .fl_1 .shop-img {
+    width:229px;
+    height:320px
+}
+.body .fl_1 .goods-detail {
+    margin-left:12px;
+    margin-right:12px
+}
+.body .fl_1 .goods-detail .name-goods {
+    margin-top:12px;
+    margin-bottom:10px;
+    word-wrap:break-word;
+    color:#666;
+    height:14px;
+    overflow:hidden
+}
+.body .fl_1 .goods-detail .info-goods {
+    color:#f69;
+    height:48px;
+    line-height:45px;
+    border-bottom:1px dotted #d2d2d2
+}
+.body .fl_1 .goods-detail .info-goods .f-18 {
+    font-family:"Microsoft YaHei";
+    font-size:14px;
+    font-weight:bold;
+    float:left;
+    line-height:49px
+}
+.body .fl_1 .goods-detail .info-goods .f-14 {
+    font-size:25px;
+    float:left;
+    margin-left:5px
+}
+.body .fl_1 .goods-detail .info-goods s {
+    float:left;
+    margin-top:6px;
+    margin-left:3px;
+    color:#999
+}
+.body .fl_1 .goods-detail .info-goods .pnum {
+    float:right;
+    width:48px;
+    height:17px;
+    line-height:17px;
+    background:#f69;
+    -webkit-border-radius:3px;
+    border-radius:3px;
+    color:#fff;
+    font-weight:bold;
+    text-align:center;
+    margin-top:17px
+}
+.body .fl_1 .goods-detail .newdeal {
+    margin-top:12px;
+    margin-bottom:12px
+}
+.body .fl_1 .goods-detail .newdeal .newdeal-left {
+    float:left;
+    color:#999;
+    font-family:none;
+    line-height:16px
+}
+.body .fl_1 .goods-detail .newdeal .newdeal-right {
+    text-align:right;
+    color:#666
+}
+.body .fl_1 .goods-detail .np-share {
+    border-top:1px dotted #d2d2d2
+}
+.body .fl_1 .goods-detail .np-share .share-left {
+    color:#999;
+    position:relative;
+    margin-top:10px;
+    font-size:12px
+}
+.body .fl_1 .goods-detail .np-share .share-left .f-12 {
+    color:#666;
+    font-size:12px
+}
+.body .fl_1 .goods-detail .np-share .share-left img {
+    float:left;
+    margin-right:8px;
+    margin-bottom:34px;
+    width:32px;
+    height:32px
+}
+.body .fl_1 .goods-detail .np-share .share-left p {
+    margin-top:5px;
+    text-align:left;
+    line-height:16px;
+    word-wrap:break-word;
+    width:230px;
+    float:right;
+    overflow:hidden;
+    height:32px
+}
+.body .fl_1 .goods-detail .np-share .share-right {
+    float:right;
+    margin-top:10px;
+    margin-right:5px
+}
+.body .fl_1 .goods-detail .np-share .share-right .pt-m {
+    display:inline-block;
+    float:left;
+    margin-right:6px
+}
+.body .fr_1 {
+    width:302px;
+    float:right;
+    margin-right:22px;
+    margin-bottom:22px
+}
+.body .fr_1 img, .body .fr_1 a {
+    display:block
+}
+.body .fr_1 img {
+    border-bottom:1px dashed #e6e6e6;
+    width:300px;
+    border:1px solid #ddd
+}
+.body .fr_1 a img {
+    height:115px
+}
+.body .fr_1 .img_t {
+    height:400px;
+    border:1px solid #ddd;
+    margin-bottom:22px
+}
+.shadow {
+    margin-top:-11px;
+    box-shadow:0 -7px 0 #fff, -7px 0 0 #fff, 7px 0 0 #fff, 0px 2px 7px #e6e6e6;
+    width:100%;
+    filter:progid:DXImageTransform.Microsoft.Shadow(Strength=7, Direction=180, Color='#e6e6e6')
+}
+.scrollin {
+    width:100%;
+    margin-bottom:10px;
+    margin:0 auto 10px auto
+}
+.scrollout {
+    width:1200px;
+    margin:0 auto 20px auto
+}
+.f_container {
+    background-color:#fff
+}
+.c_content {
+    height:51px;
+    border-bottom:solid 1px #e6e6e6;
+    text-align:center
+}
+.er_l {
+    float:left
+}
+.er_l .r_title {
+    font-size:20px;
+    margin-top:10px;
+    display:inline-block;
+    padding-right:10px
+}
+.er_l .r_title .red {
+    color:#fd6699
+}
+.er_l .r_dec {
+    font-size:14px;
+    color:#999;
+    border-left:1px dotted;
+    padding-left:10px
+}
+.tab_span {
+    display:inline-block;
+    font-size:16px;
+    padding:0 40px;
+    height:43px;
+    line-height:43px;
+    border:solid 1px transparent
+}
+.tab_active {
+    border-top:solid 1px #e6e6e6;
+    border-left:solid 1px #e6e6e6;
+    border-right:solid 1px #e6e6e6;
+    border-bottom:solid 1px #fff;
+    background-color:#fff;
+    color:#fd6699
+}
+.editorrecom {
+    height:44px;
+    margin:20px auto;
+    border-bottom:solid 1px #e6e6e6;
+    width:1200px
+}
+.editorrecom .recom_tab {
+    float:right
+}
+.rec_sku {
+    padding-bottom:20px;
+    overflow:hidden;
+    width:1200px;
+    margin:0 auto
+}
+.rec_sku li {
+    float:left;
+    display:inline;
+    margin-right:12px;
+    width:190px
+}
+.rec_sku li .s_picBox {
+    height:267px;
+    width:190px;
+    display:block;
+    overflow:hidden
+}
+.rec_sku li .s_picBox .s_pic {
+    height:267px;
+    width:190px;
+    text-align:center;
+    vertical-align:middle;
+    display:table-cell;
+    *font-size:180px
+}
+.rec_sku li .s_picBox .s_pic img {
+    width:190px;
+    height:267px;
+    vertical-align:middle
+}
+.rec_sku li p {
+    margin:10px 10px 0 10px;
+    padding-bottom:10px
+}
+.rec_sku li .txt {
+    display:block;
+    height:18px;
+    line-height:18px;
+    overflow:hidden
+}
+.rec_sku li .price {
+    color:#999;
+    text-decoration:line-through;
+    padding-left:10px
+}
+.rec_sku li .price_red {
+    color:#f69;
+    font-size:16px
+}
+.rec_sku li .price_box {
+    border-bottom:1px dotted #ccc;
+    margin-bottom:8px;
+    margin-top:0
+}
+.rec_sku .last {
+    margin-right:0
+}
+.light_all {
+    background-position:-26px -84px;
+    color:#fd6699
+}
+.light_cloth {
+    background-position:-220px -86px;
+    color:#fd6699
+}
+.light_shoes {
+    background-position:-414px -84px;
+    color:#fd6699
+}
+.light_baobao {
+    background-position:-608px -84px;
+    color:#fd6699
+}
+.light_jiaju {
+    background-position:-963px -86px;
+    color:#fd6699
+}
+.light_peishi {
+    background-position:-801px -84px;
+    color:#fd6699
+}
+.light_beauty {
+    background-position:-121px -86px;
+    color:#fd6699
+}
+.classify {
+    margin:10px auto 0 auto;
+    display:inline-block
+}
+.classify .c_menu {
+    width:1144px;
+    margin-left:auto;
+    margin-right:auto
+}
+.classify .c_menu li {
+    float:left;
+    list-style:none;
+    line-height:40px;
+    height:40px;
+    padding-left:30px;
+    padding-right:30px;
+    display:inline
+}
+.classify .c_menu .split {
+    width:0;
+    padding-right:0;
+    padding-left:0;
+    display:none
+}
+.classify .c_menu .split span {
+    line-height:40px;
+    border-left:dotted 1px #999
+}
+.classify .c_menu .all {
+    background-position:-26px -15px
+}
+.classify .c_menu .all:hover {
+    background-position:-26px -84px;
+    color:#fd6699
+}
+.classify .c_menu .cloth {
+    background-position:-220px -15px
+}
+.classify .c_menu .cloth:hover {
+    background-position:-220px -86px;
+    color:#fd6699
+}
+.classify .c_menu .shoes {
+    background-position:-415px -13px
+}
+.classify .c_menu .shoes:hover {
+    background-position:-414px -84px;
+    color:#fd6699
+}
+.classify .c_menu .baobao {
+    background-position:-608px -13px
+}
+.classify .c_menu .baobao:hover {
+    background-position:-608px -84px;
+    color:#fd6699
+}
+.classify .c_menu .jiaju {
+    background-position:-964px -13px
+}
+.classify .c_menu .jiaju:hover {
+    background-position:-963px -86px;
+    color:#fd6699
+}
+.classify .c_menu .peishi {
+    background-position:-801px -13px
+}
+.classify .c_menu .peishi:hover {
+    background-position:-801px -84px;
+    color:#fd6699
+}
+.classify .c_menu .beauty {
+    background-position:-121px -16px
+}
+.classify .c_menu .beauty:hover {
+    background-position:-121px -86px;
+    color:#fd6699
+}
+.classify .cicon {
+    background-image:url(' http://i.meilishuo.net/css/images/huodong/tuan/icon4.png');
+    display:inline-block;
+    width:100%;
+    height:40px
+}
+.classify .ctitle {
+    width:40px;
+    margin-left:40px;
+    float:left
+}
+.link {
+    display:block;
+    margin:0 1px;
+    height:100%;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:400
+}
+.range {
+    width:1200px;
+    margin:0 auto
+}
+.range .special {
+    margin-left:20px
+}
+.range .p_total {
+    color:#666
+}
+.range .t_tuan {
+    margin-top:-10px
+}
+.range ul {
+    float:right;
+    line-height:30px
+}
+.range li {
+    float:left
+}
+.range li span {
+    color:#999
+}
+.range li.active a {
+    color:#f69
+}
+.range li a {
+    padding:0 0 0 20px;
+    cursor:pointer
+}
+.range .arrow_t, .range .arrow_d, .range a:hover .arrow_t, .range a:hover .arrow_d, .range li.active .arrow_t, .range li.active .arrow_d {
+    width:10px;
+    height:10px;
+    padding:0 3px;
+    margin-left:10px;
+    background:url("http://i.meilishuo.net/css/images/doota/huodong/shareact/i_4arrow.gif") no-repeat 0 0
+}
+.range .arrow_t {
+    background-position:0 1px
+}
+.range .arrow_d {
+    background-position:-10px 1px
+}
+.range a:hover .arrow_t, .range li.active .arrow_t {
+    background-position:-20px 1px
+}
+.range a:hover .arrow_d, .range li.active .arrow_d {
+    background-position:-30px 1px
+}
+.alpha {
+    margin-left:0
+}
+.omega {
+    margin-right:0
+}
+
+/**  ==============自己新增的==================  */
+
+.table_show{margin-top: 10px; height:400px; overflow: auto;}
+/*.meassage_box{font-size:16px; margin:10px 0px 10px 70px;}*/
+.row{margin:10px 0px 10px 0px;}
+/** 模版 */
+.rec_sku li {
+  float: left;
+  display: inline;
+  margin-right: 15px;
+  margin-bottom: 10px;
+  width: 200px;
+  border: 1px solid rgb(29, 148, 242);
+}
+.rec_sku { width:auto; }
+.rec_sku li .s_picBox  { width:auto; }
+#recommendBox li {
+  float: left;
+  display: inline;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 165px;
+  height: 370px;
+  border: 1px solid rgb(29, 148, 242);
+}
+#recommendBox li {
+  float: left;
+  display: inline;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 165px;
+  height: 300px;
+  border: 1px solid rgb(29, 148, 242);
+}
+#recommendBox li .s_picBox {
+    height:200px;
+    width: auto;
+    display:block;
+    overflow:hidden
+}
+.rec_sku li.hasRecommend { border: 1px solid red; }
+
+.rec_sku .msg-li {
+  border: none;
+  width: 100%;
+  text-align: center;
+  height: 100px;
+  line-height: 100px;
+}
+
+/** 返回顶部 */
+.go-top-box {
+  position: fixed;
+  bottom: 45px;
+  right: 40px;
+  width: 26px;
+  height: 88px;
+  background: url(/assets/images/go-top.png) no-repeat;
+  cursor: pointer;
+}

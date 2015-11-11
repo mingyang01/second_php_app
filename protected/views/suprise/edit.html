@@ -1,0 +1,168 @@
+{/include file="layouts/header.tpl"/}
+<script src="/assets/lib/imgAjaxfileUp.js"></script>
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<script src="/assets/js/suprise/editZhengdianTime.js"></script>
+<style>
+.goods-photos {
+  float:left;
+}
+.goods-photos li {
+  width:107px;
+  height:125px;
+  border: 1px solid #ccc;
+  padding:1px;
+}
+
+.goods-photos img {
+  max-width:none;
+}
+
+.sku-error-label {
+  margin-left: 5px;
+  margin-top: 4px;
+  color:#b94a48;
+}
+.upload-img {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.upload-img  input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+</style>  
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li class="active">惊喜秒杀</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form id="createForm" class="form-inline" enctype="multipart/form-data"  action="/suprise/saveZhengdianTime" method="post">
+        
+        <input type="hidden" name="event_id" value="{/$eventInfo['event_id']/}">
+        
+        <!-- 时间  -->
+        <div class="control-group">
+          <blockquote>
+            <p>挣点抢时间段<small>必填</small></p>
+            <button type="button" class="btn btn-primary btn-sm btnAddZhengdianTimeAll">新增时间(全天) <i class="glyphicon glyphicon-plus"></i></button>
+            <button type="button" class="btn btn-primary btn-sm btnAddZhengdianTimeOne">新增时间(单个) <i class="glyphicon glyphicon-plus"></i></button>
+          </blockquote>
+          <div class="zhengdianTimeCon">
+          {/foreach $newZhengdianInfo as $k=>$v/}
+            <div class="form-group" style="margin:3px 0;">
+              <label>说明：</label><input class="require input-medium form-control" type="text" name="stime_note[]"  value="{/$v.stime_note/}" readonly>
+              <label>开始时间：</label><input class="require input-medium form-control" type="text" name="ctime[]"   value="{/$v.stime/}" readonly>
+              <label>结束时间：</label><input class="require input-medium form-control" type="text" name="etime[]"  value="{/$v.etime/}" readonly>
+              <button type="button"  class="btn btn-danger btn-xs btnDeleteTimeOnline">删除</button>
+            </div>
+          {//foreach/}
+          </div>
+          <span class="help-inline"></span>
+        </div>
+        <div class="control-group">
+          <blockquote><p>图片</p></blockquote>
+          <div class="imgbackrgound imgCon" style="height: 290px;width: 290px;">
+            <img src="{/getImageUrl($eventInfo['detail']['q8_ruler'])/}" style="height:290px;width:290px;">
+            <input type="hidden" name="q8_ruler" value="{/$eventInfo['detail']['q8_ruler']/}">
+          </div>
+          <span class="btn btn-default upload-img btnUploadImg">
+            <input type="file" class="uploadImgInput" name="uploaod_img" id="q8_ruler_uploaod" onchange="javascript:bannerUpload('q8_ruler_uploaod', 'q8_ruler', $(this).parent().prev())">上传
+          </span>
+          <span class="help-inline"></span>
+        </div>
+        <!-- 内容 -->
+        <div class="control-group">
+          <p>&nbsp;</p><p>&nbsp;</p>
+          <input type="submit" class="btn btn-primary Sub createBtn" value="添加">
+        </div>
+      </form>
+    </div>
+  </div>
+  
+
+</div>
+<script>
+$(function(){
+  /** 选择时间 */
+  $('.myDatePicker').on('focus',function(){
+    WdatePicker({
+        dateFmt:'yyyy-MM-dd HH:00'
+    });
+  });
+});
+
+
+$(function(){
+  var isEdit = false;
+  // 表单提交
+  $('#createForm').submit(function(e){
+    e.preventDefault();
+    
+    if ($('.createBtn').hasClass('disabled')) {
+      alert('请稍等，正在保存');
+      return false;
+    }
+    
+    
+    $('.createBtn').addClass('disabled');
+    $('#createForm').unbind().submit();
+  });
+});
+
+/**
+ * 显示错误信息
+ */
+function showError(obj, msg)
+{
+  if (obj.length) {
+    obj.siblings('.help-inline').text(msg).closest('.control-group').addClass('error');
+    obj.focus();
+  }
+  return obj;
+}
+
+//图片上传方法
+function bannerUpload(id, imputImgName,imgObj) {
+  $.ajaxFileUpload({
+       url:'/goods/uploadImage',
+       secureuri:false,
+       fileElementId:id,
+       dataType:'json',
+       data: {'filename':id},
+       success:function(data){
+           if(data.succ == 1){
+               var height = imgObj.css("height");
+               var width  = imgObj.css("width");
+               var inImg = "<img src="+data.img+" style='height:"+height+";width:"+width+"'>";
+               inImg += "<input type='hidden' name='"+imputImgName+"' value='"+data.path+"'>";
+               imgObj.html(inImg);
+               
+           }else{
+               alert(data.msg);
+           }
+       },
+       error: function (data, status, e){
+          alert(data.responseText);
+       }
+  });
+};
+</script>
+{/include file="layouts/footer.tpl"/}

@@ -1,0 +1,159 @@
+{/include file="layouts/header.tpl"/}
+<title>编辑活动基本信息</title>
+<script src="/assets/lib/My97DatePicker/WdatePicker.js"></script>
+<style>
+.container{
+  /*font-size:12px;*/
+}
+</style>
+<style>
+.goods-photos {
+  float:left;
+}
+.goods-photos li {
+  width:107px;
+  height:125px;
+  border: 1px solid #ccc;
+  padding:1px;
+}
+
+.goods-photos img {
+  max-width:none;
+}
+
+.sku-error-label {
+  margin-left: 5px;
+  margin-top: 4px;
+  color:#b94a48;
+}
+
+</style>  
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <ol class="breadcrumb">
+          <li><a href="/">Home</a></li>
+          <li><a href="/event">活动</a></li>
+          <li class="active">{/$eventInfo.event_name/}</li>
+          <li class="active">编辑活动</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <form id="createForm" class="form-inline" enctype="multipart/form-data"  action="/event/saveBasicInfo" method="post">
+        <p>所属频道：<span style="color:red;">{/EventManager::$channelMap[$eventInfo['channel']]/}</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 活动类型：<span style="color:red;">{/EventManager::$evnetTypeEnum[$eventInfo['status']]/}</span></p>
+        <p>活动时间：{/date("Y-m-d H:i", $eventInfo['start_time'])/} - {/date("Y-m-d H:i", $eventInfo['end_time'])/} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预热时间：{/if $eventInfo['preheat_time']/}{/date("Y-m-d H:i", $eventInfo['preheat_time'])/}{//if/}</p>
+        <input type="hidden" name="event_id" value="{/$eventInfo['event_id']/}">
+        
+        <!-- 活动名称 -->
+        <div class="control-group">
+          <blockquote><p>活动名称<small>必选</small></p></blockquote>
+          <input type="text" class="require input-xlarge form-control" name="event_name" id="event_name" value="{/$eventInfo['event_name']/}">
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 活动标题 -->
+        <div class="control-group">
+          <blockquote><p>活动标题<small>选填</small></p></blockquote>
+          <input type="text" class="require input-xlarge form-control" name="title" id="title" value="{/$eventInfo['title']/}">
+          <span class="help-inline"></span>
+        </div>
+        <!-- 时间  -->
+        <div class="control-group">
+          <blockquote><p>报名时间<small>可选</small></p></blockquote>
+          <input type="text" class="require input-medium form-control myDatePicker" name="join_start_time" id="join_start_time" value="{/if $eventInfo['join_start_time'] && $eventInfo['join_start_time'] != '0000-00-00 00:00:00'/}{/date('Y-m-d H:i',strtotime($eventInfo['join_start_time']))/}{//if/}"> - 
+          <input type="text" class="require input-medium form-control myDatePicker" name="join_end_time" id="join_end_time" value="{/if $eventInfo['join_end_time'] && $eventInfo['join_end_time'] != '0000-00-00 00:00:00'/}{/date('Y-m-d H:i',strtotime($eventInfo['join_end_time']))/}{//if/}">
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 活动类型 -->
+        <div class="control-group">
+          <blockquote><p>活动类型<small>必选</small></p></blockquote>
+          <select class="require input-medium form-control" name="join_status" id="join_status">
+            <option value="1" {/if $eventInfo['join_status'] == 1/}selected{//if/}>不可报名</option>
+            <option value="0" {/if $eventInfo['join_status'] == 0/}selected{//if/}>可报名</option>
+          </select>
+          <span class="help-inline"></span>
+        </div>
+        
+        {/*
+        <!-- 时间  -->
+        <div class="control-group">
+          <blockquote><p style="color:red;">活动时间<small>可选</small></p></blockquote>
+          <input type="text" class="require input-medium form-control myDatePicker" name="start_time" id="start_time" value="{/date("Y-m-d H:i", $eventInfo['start_time'])/}" disabled> - 
+          <input type="text" class="require input-medium form-control myDatePicker" name="end_time" id="end_time" value="{/date("Y-m-d H:i", $eventInfo['end_time'])/}" disabled>
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 时间  -->
+        <div class="control-group">
+          <blockquote><p style="color:red;">预热时间<small>可选</small></p></blockquote>
+          <input type="text" class="require input-medium form-control myDatePicker" name="preheat_time" id="preheat_time" value="{/if $eventInfo['preheat_time']/}{/date("Y-m-d H:i", $eventInfo['preheat_time'])/}{//if/}" disabled>
+          <span class="help-inline"></span>
+        </div>
+        */}
+        <!-- 内容 -->
+        <div class="control-group">
+          <p>&nbsp;</p>
+          <input type="submit" class="btn btn-primary Sub createBtn" value="添加">
+        </div>
+      </form>
+    </div>
+  </div>
+  
+
+</div>
+<script>
+$(function(){
+  $('.datepicker').datepicker({
+      format: "yyyy-mm-dd",
+      autoclose: true
+  }).on('changeDate', function(ev){
+      $(this).datepicker('hide');
+  });
+  
+  /** 选择时间 */
+  $('.myDatePicker').on('focus',function(){
+    WdatePicker({
+        dateFmt:'yyyy-MM-dd HH:mm'
+    });
+  });
+});
+
+
+$(function(){
+  var isEdit = false;
+  // 表单提交
+  $('#createForm').submit(function(e){
+    e.preventDefault();
+    
+    if ($('.createBtn').hasClass('disabled')) {
+      alert('请稍等，正在保存');
+      return false;
+    }
+    
+    if (!$.trim($('#createForm input[name="event_name"]').val())) {
+      showError($('#createForm input[name="event_name"]'), '请填写活动名称！');
+      return false;
+    }
+    
+    $('.createBtn').addClass('disabled');
+    $('#createForm').unbind().submit();
+  });
+});
+
+/**
+ * 显示错误信息
+ */
+function showError(obj, msg)
+{
+  if (obj.length) {
+    obj.siblings('.help-inline').text(msg).closest('.control-group').addClass('error');
+    obj.focus();
+  }
+  return obj;
+}
+</script>
+{/include file="layouts/footer.tpl"/}

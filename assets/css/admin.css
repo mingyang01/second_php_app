@@ -1,0 +1,71 @@
+/** 添加选项中的提示 */
+blockquote p {
+  font-weight: 700;
+}
+blockquote small {
+  display: inline-block;;
+  margin-left:10px;
+}
+blockquote {
+  font-family: "微软雅黑";
+  border-left: 5px solid #84B2F8;
+  margin: 20px 0 5px 0;
+  padding: 0px 10px;
+  border-left: 5px solid #EA767D;
+}
+
+a {cursor: pointer;}
+
+/** 表单宽度公用样式  */
+.input-mini{width:60px !important;}
+.input-small{width:90px !important;}
+.input-medium{width:150px !important;}
+.input-large{width:210px !important;}
+.input-xlarge{width:270px !important;}
+.input-xxlarge{width:530px !important;}
+.form-group{margin-right:50px !important;}
+
+
+/** 表单提示 */
+.help-inline {margin-left:10px;}
+.error .help-inline{color:red;}
+
+/** 错误提示样式 */
+.alert-error {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+/** 菜单选中样式 */
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+  cursor: auto;
+}
+
+/** 添加图片背景 */
+.imgbackrgound {margin-bottom:3px;background:#ddd;text-align:center;display: inline-block;}
+
+/** 添加页面样式-添加店铺 */
+.add-con{
+  margin-bottom: 3px;
+  background-color: #ddd;
+  border-color: #ddd;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  overflow: hidden;
+  text-align: left;
+}
+.add-con .add-con-header{
+  padding: 10px 5px;
+  border-bottom: 1px solid transparent;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.add-con .add-con-body{
+  padding : 5px;
+  background-color: #fff;
+  color: #444;
+  font-size: 12px;
+}

@@ -1,0 +1,248 @@
+{/include file="layouts/header.tpl"/}
+<script type="text/javascript" src="/assets/lib/bootstrap-datepicker.js"></script>
+<style type="text/css" src="/assets/css/datepicker.css"></style>
+<script src="/assets/lib/bufferview.js"></script>
+<script src="/assets/lib/jquery.pin.js"></script>
+<script src='/assets/lib/js/Sortable.js'></script>
+<title>秒杀预览</title>
+<style type="text/css">
+.rec_sku .price {
+    color: #999;
+    text-decoration: line-through;
+    padding-left: 10px
+}
+.rec_sku .price_red {
+    color: #f69;
+    font-size: 16px
+}
+#thumbnail-label {
+    font-size: 16px
+}
+.img {
+    height: 300px;
+}
+.pinActive {
+    box-shadow: 0 10px 6px rgba(0,0,0,.12),0 1px 6px rgba(0,0,0,.12) !important;
+    /*width: 100%!important;*/
+    background-color: white;
+    z-index:999;
+}
+
+.caption > p {
+    white-space: nowrap;
+    /*background-color: lavenderblush;*/
+}
+.select2-selection {
+    height: 34px !important;
+}
+.select2-selection__rendered {
+    height: 34px !important;
+    line-height: 32px !important;
+}
+.nav-tabs a {
+    color: black;
+}
+.tool a, .active a {
+    border: 0px !important;
+    color: white !important;
+    background: #f46 !important;
+    border-radius: 0px !important;
+}
+
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ol class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="/">惊喜秒杀</a></li>
+                <li class="active">秒杀预览</li>
+            </ol>
+            {/include file="suprise/search.html"/}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 pinned ">
+            <div role="tabpanel">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    {/foreach from=$area item=item key=key/}
+                    <li data-start="{/$item.stime/}" data-end="{/$item.etime/}" role="presentation" class="supriseTimeList">
+                        <a href="#whole" aria-controls="whole" role="tab" data-toggle="tab">{/$item.area/}</a>
+                    </li>
+                    {//foreach/}
+                    <li role="presentation" class="tool pull-right">
+                        <a id="schedule" href="javascript:;">保存</a>
+                    </li>
+
+                    <li role="presentation" class="tool pull-right">
+                        <a id="search" href="javascript:;">查看</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div  class="row">
+        <div class="col-md-12">
+            <h4 id="tool-tip-count" style="color:#fd6699">商品数目:{/$count/}</h4>
+            <p>提示：本页面主要提供预览功能，以及排序修改</p>
+        </div>
+    </div>
+    <div class="row" id="box-contailer">
+        {/foreach from=$data item=item key=key/}
+        <div class="col-md-3 col-sm-4">
+            <div class="thumbnail" data-shop={/$item.shop/} data-gid={/$item.gid/} data-tid={/$item.tid/}>
+                <div class="img" style="position: relative;">
+                    <a target="_blank" href="http://www.meilishuo.com/share/item/{/$item.tid/}">
+                        <img data-src="holder.js/100%x200" alt="100%x200" src="{/Yii::app()->image->getWebsiteImageUrl($item.img)/}" data-holder-rendered="true" style="height: 100%; width: 100%; display: block;">
+                    </a>
+                    {/if in_array($append[$item.gid]['category'], array(12,13))/}
+                      <div style="position: absolute;top: 0px;left: 0px;"><img src="/assets/images/miao_{/$append[$item.gid]['category']/}.png" style="width:64px;"></div>
+                    {/elseif $item['op_type'] && array_key_exists($item['op_type'], SupriseManager::$miaosh_tag_map)/}
+                      <div style="position: absolute;top: 0px;left: 0px;"><img src="/assets/images/miao_{/$item['op_type']/}.png" style="width:64px;"></div>
+                    {//if/}
+                </div>
+                <div class="caption">
+                    <h3 id="thumbnail-label">{/$item.name/}<a class="anchorjs-link" href="#thumbnail-label"><span class="anchorjs-icon"></span></a><span class="price_red pull-right" style="color: #f69;">{/$item.level/}</span></h3>
+                    <p><span>店铺：</span>{/$item.shop_nick/}</p>
+                    <p>{/$item.tid/}@{/$item.shop/}</p>
+                    <p style=" white-space: nowrap;">{/$item.goods_first_catalog/}—{/$item.goods_second_catalog/}—{/$item.goods_three_catalog/}</p>
+                    <p>销量：{/$item.sale_num/}&nbsp;&nbsp;库存：{/$item.repertory/}</p>
+                    <p>
+                        报名时间：{/$item.createTime/}
+                    </p>
+                    <p>电话:<span class="partner_tel">{/$item.partner_tel/}</span> &nbsp;QQ:<span class="partner_qq">{/$item.partner_qq/}</span></p>
+                    <p>
+                        库存限制：<span style="color: red;font-size:20px">{/$append[$item.gid]['limit']/}</span>
+                    </p>
+                    <p class="rec_sku">
+                        <span class="price_red">{/$item.price/}</span>
+                        <span class="price" style="padding-left: 0px;">{/$item.origin/}</span>
+                        <span class="price_red">{/$item.rate * 10/}折</span>
+                        <span class="pull-right">
+                          <a href="/goods/editGoods?gid={/$item.gid/}" target="_blank" class="btn btn-default btn-sm">编辑</a>
+                          <button data-gid="{/$item.gid/}" role="button" class="btn btn-warning btnCancelGoodsOne btn-sm">退回</button>
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {//foreach/}
+    </div>
+</div>
+<script type="text/javascript">
+    $('[data-start="{/$from/}"]').addClass('active');
+
+    $('#tool-tip-count').text($('#tool-tip-count').text() + "(" + $('[name="major"] option:selected').text() + "类目)"
+    );
+    $(".pinned").pin({'activeClass': 'pinActive'})
+    
+    $(window).resize(function(e){
+        $(".pinned").pin({'activeClass': 'pinActive'})
+    });
+    // $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+    //     e.target // newly activated tab
+    //     e.relatedTarget // previous active tab
+    //     $('#search').click()
+    // })
+    $('#search').click(function(e){
+        e.preventDefault();
+        var url = '/suprise/index?'
+        if (0 == dateChange) {
+            url += 'start=' + 
+            $('.nav-tabs .active').data('start') + '&end=' +
+            $('.nav-tabs .active').data('end') + '&'
+            + $('#form').serialize();
+        } else {
+          url += $('#form').serialize();
+        }
+
+        window.location = url;
+        return false;
+    });
+    var dateChange = 0;
+    $('#date').change(function(e) {
+        dateChange = 1;
+    });
+$(function(){
+  /** 推荐位移动 */
+  var moveRecommend = document.getElementById("box-contailer");
+  new Sortable(moveRecommend, {
+    handle: '.img'
+  });
+  $("#schedule").click(function(){
+    if ($(this).hasClass("disabled")) return false;
+    var thisObj = $(this);
+    
+    var startTime = $(".supriseTimeList[class*='active']").attr("data-start");
+    var endTime   = $(".supriseTimeList[class*='active']").attr("data-end");
+
+    var selectedList = $(".thumbnail");
+    var idsArr = [];
+    $.each(selectedList, function(k, v){
+      idsArr.push($(v).closest(".thumbnail").attr("data-gid"));
+    });
+    if (idsArr.length < 1) {
+      alert('请选择商品');
+      return false;
+    }
+    var ids = idsArr.join(",");
+    
+    if (confirm("您确定要将 "+idsArr.length+"个商品重新排序吗？") == false) {
+      return false;
+    }
+    
+    var postData = {'tuan_id':ids, 'start_time':startTime, 'end_time':endTime};
+    var objInHtml = thisObj.html();
+    setBtnStatus(thisObj, '提交中...', 'disabled');
+    $.post('/suprise/saveZhengdianSort', postData, function(json){
+      if (json.succ == 1) {
+        //alert('成功操作： '+json.succ_num+" 个商品，操作失败： "+json.err_num+" 个商品");
+        window.location.reload();
+        setBtnStatus(thisObj, objInHtml, 'succ');
+      } else {
+        alert(json.msg);
+        setBtnStatus(thisObj, objInHtml, 'succ');
+      }
+    },'json').error(function(code, data){
+      alert('遇到服务器错误');
+      setBtnStatus(thisObj, objInHtml, 'succ');
+    });
+  });
+  
+  /**
+   * 取消排期
+   */
+  $(".btnCancelGoodsOne").click(function(){
+    if ($(this).hasClass("disabled")) return false;
+    var thisObj = $(this);
+    var tuanId  = thisObj.attr("data-gid");
+    if (!tuanId) {
+      alert('商品id不存在');
+      return false;
+    }
+    if (confirm("您确定要取消排期吗？") == false) {
+      return false;
+    }
+    
+    var postData = {'tuan_id':tuanId};
+    var objInHtml = thisObj.html();
+    setBtnStatus(thisObj, '提交中...', 'disabled');
+    $.post('/schedule/cancelSchedule', postData, function(json){
+      if (json.succ == 1) {
+        setBtnStatus(thisObj, objInHtml, 'succ');
+        thisObj.closest(".thumbnail").parent(".col-md-3").fadeOut(function(){
+          $(this).remove();
+        });
+      } else {
+        alert(json.msg);
+        setBtnStatus(thisObj, objInHtml, 'succ');
+      }
+    },'json').error(function(code, data){
+      alert('遇到服务器错误');
+      setBtnStatus(thisObj, objInHtml, 'succ');
+    });
+  });
+});
+</script>
+{/include file="layouts/footer.tpl"/}

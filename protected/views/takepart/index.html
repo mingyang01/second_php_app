@@ -1,0 +1,116 @@
+{/include file="layouts/header.tpl"/}
+<title>团购报名</title>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div role="tabpanel">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" >
+            <a href="/takepart" >团购报名</a>
+          </li>
+          <li role="presentation" class="active">
+            <a href="/takepart/newApply" >新版团购报名</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+        <!-- 活动名称 -->
+        <div class="control-group">
+          <blockquote><p>推ID<small>必选</small></p></blockquote>
+          <input type="text" class="require input-xlarge form-control" id="twitterInput" placeholder="推Id">
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 活动标题 -->
+        <div class="control-group">
+          <blockquote><p>活动标题<small>选填</small></p></blockquote>
+          <select class="form-control input-xlarge" id="eventIdInput">
+              <option value="0">普通团购(慎用截图功能)</option>
+              {/html_options options=$events/}
+          </select>
+          <span class="help-inline"></span>
+        </div>
+        
+        <!-- 活动名称 -->
+        <div class="control-group">
+          <blockquote><p>折扣价<small>必选</small></p></blockquote>
+          <input type="text" class="form-control input-medium" id="offPriceInput" placeholder="折扣价">
+          <span class="help-inline"></span>
+        </div>
+        <!-- 内容 -->
+        <div class="control-group">
+          {/*<label><input type="checkbox" type="checkbox" id="notCheckApply" name="not_chack_apply"> 强制报名</label>*/}
+          <input type="hidden" name="not_check_apply" id="notCheckApply" value={/$not_check_apply/}>
+          <p></p>
+          <p id="errorMessageCon" style="color:red;"></p>
+          <p></p>
+          <input type="button" class="btn btn-primary Sub createBtn" id="createBtn" disabled value="报名">
+        </div>
+    </div>
+    <div class="col-md-6 thumbnail twitterInfoCon" style="height:350px; width:500px;float:left;margin-top:10px;">
+
+    </div>
+  </div>
+</div>
+<script>
+$(function(){
+  $("#twitterInput").focusout(function(){
+    var thisObj = $(this);
+    var twitterId = thisObj.val();
+    if (!twitterId) return false;
+    
+    $.post('/takepart/getTwitterInfo', { 'twitter_id':twitterId }, function(json){
+      if (json.succ == 1) {
+        $(".twitterInfoCon").html(json.data);
+        $("#createBtn").removeAttr("disabled");
+      } else {
+        $("#errorMessageCon").html(json.msg);
+      }
+    }, 'json');
+  });
+  
+  
+  $("#createBtn").click(function(){
+    if ($(this).hasClass("disabled")) return false;
+    var thisObj = $(this);
+    
+    var twitterId = $("#twitterInput").val();
+    var eventId   = $("#eventIdInput").val();
+    var price     = $("#offPriceInput").val();
+    var notCkeck  = $("#notCheckApply").val();
+    /*if ($("#notCheckApply").prop("checked") === true) {
+      notCkeck = 1;
+    }*/
+    
+    if (!twitterId) {
+      alert('请输入twitter_id');
+      return false;
+    }
+    if (!price) {
+      alert('请输入价格');
+      return false;
+    }
+    
+    var postData = { 'twitter_id':twitterId, 'event_id':eventId, 'not_check_apply':notCkeck, 'price':price };
+    var objInHtml = thisObj.html();
+    setBtnStatus(thisObj, '提交中...', 'disabled');
+    $.post('/takepart/saveTwitterInfo', postData, function(json){
+      if (json.succ == 1) {
+        alert('报名成功');
+        window.location.reload();
+      } else {
+        alert(json.msg);
+        $("#errorMessageCon").html(json.msg);
+      }
+      setBtnStatus(thisObj, objInHtml, 'succ');
+    },'json').error(function(code,data){
+      alert('遇到服务器错误');
+      setBtnStatus(thisObj, objInHtml, 'succ');
+    });
+  });
+});
+</script>
+{/include file="layouts/footer.tpl"/}

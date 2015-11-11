@@ -1,0 +1,112 @@
+<style type="text/css">
+.img {
+height: 200px;
+}
+
+.level {
+    color: #f69;
+    font-size: 18px;
+}
+
+.tool {
+    position: relative;
+    /*top: 20px;*/
+    left: 40px;
+}
+
+.btn-danger {
+    background-color: #f46;
+}
+
+.popover {
+  max-width: 562px;
+}
+
+.ComparePrice{
+    display: none;
+}
+</style>
+
+
+
+<div class="row" id="box-container">
+    {/foreach from=$data item=item key=key/}
+    <div class="col-md-6">
+        <div data-shop="{/$item.shop/}" data-step="{/$step/}" data-gid="{/$item.gid/}" data-twitter="{/$item.tid/}" class="thumbnail" style="height: 360px;">
+            <div style="line-height:24px;height: 30px; border-bottom: solid 1px #ccc; margin-bottom:4px;" class="col-md-12">
+                <strong style="font-size:18px;">{/$CheckTips = CheckTipsManager::$tipsTypeEnum/}
+                {/$CheckTips[$item.audit_status]/} {/$item.gid/}</strong>
+                {/if $v.is_danger || $v.is_bad/}<strong style="color:red;">高危商品</strong>{//if/}
+                <span class="level pull-right" style="color: #f69;">{/if $item.isshow == 1/}普通{//if/}{/if $item.isshow == 0/}精品{//if/}&nbsp;&nbsp;{/if $item.level/}{/$item.level/}{//if/}</span>
+            </div>
+            <div style="line-height:24px;height: 30px; border-bottom: solid 1px #ccc; margin-bottom:4px;" class="col-md-12">
+                团购历史：{/html_entity_decode($item.tuan_history)/}
+            </div>
+            <div class="col-md-4" >
+                <div class="img">
+                    <a target="_blank" href="http://www.meilishuo.com/share/item/{/$item.tid/}">
+                    <img data-src="holder.js/100%x200" alt="100%x200" src="{/Yii::app()->image->getWebsiteImageUrl($item.img)/}" data-holder-rendered="true" style="height: 100%; width: 100%; display: block;"></a>
+                </div>
+            </div>
+            <div class="col-md-4" style="padding-right:0px;">
+                <h3 style="margin-top:0px;height:35px" id="thumbnail-label" class="thumbnailTitle">{/$item.name/}</h3>
+                <p>{/$item.tid/}</p>
+                <p style="height: 20px;overflow: hidden;">{/$item.goods_first_catalog/}—{/$item.goods_three_catalog/}</p>
+                <p>销量：{/$item.sale_num/}&nbsp;&nbsp;库存：{/$item.repertory/}</p>
+                <p>
+                    CVR：{/$item.cvr * 100/}
+                </p>
+                <p>流行分：{/$item.popularity_score/}&nbsp;&nbsp;热销分：{/$item.sellrate_score/}</p>
+                <p class="rec_sku">
+                    <span class="price_red">{/$item.price/}</span>
+                    <span class="sameInfo"></span>
+                    <span class="price">{/$item.origin/}</span>
+                    <span class="price_red pull-right">{/$item.rate * 10/}折</span>
+                </p>
+            </div>
+            <div class="col-md-4">
+                <h3 style="margin-top:0px;height:35px" id="thumbnail-label">{/$item.shop_nick/}</h3>
+                <p>{/$item.shop/}</p>
+                <p><div style="width:40px;display:inline-block;">电话:</div>{/$item.partner_tel/}</p>
+                <p><span style="width:40px;display:inline-block;">QQ:</span>{/$item.partner_qq/}</p>
+                <p>
+                    报名时间：{/current(explode(' ', $item.createTime))/}
+                </p>
+                <p>
+                   {/if $item.start_time/}
+                     <strong style="color:red;">排期：</strong>{/date("Y-m-d H:i", $item.start_time)/}
+                   {/else/}
+                     &nbsp;
+                   {//if/}
+                </p>
+                <p class="tool">
+                   {/* 如果不是初审并且不是等待初审的 */}
+                   {/if $step != 2 || $status != 0/}
+                    <span class="historyCon">
+                      <button type="button" data-gid={/$item.gid/} class="showHistoryBtn btn btn-default" data-html="true" data-toggle="popover" data-placement="bottom">历史</button>
+                    </span>
+                    {//if/}
+                    {/if $step == 2 && $status == 0/}
+                    <span class="historyCon">
+                      <button type="button" data-gid={/$item.gid/} class="changePriceBtn btn btn-danger">改价</button>
+                    </span>
+                    <span>
+                      <button type="button" data-gid={/$item.tid/} class="ComparePrice btn btn-info"
+                      data-html="true" data-toggle="popover" data-placement="bottom">同款</button>
+                    </span>
+                    {//if/}
+                    {/if $step == 4/}
+                    {/*<a data-gid={/$item.gid/} role="button" class="select-box btn btn-danger ">选定</a>*/}
+                    <span class="addressCon">
+                      <button type="button" data-gid={/$item.gid/} class="showAddressBtn btn btn-info" data-html="true" data-toggle="popover" data-placement="bottom">地址</button>
+                    </span>
+                    {//if/}
+                </p>
+            </div>
+            <div style="height: 30px; border-top: solid 1px #ccc; padding-bottom:4px;" class="col-md-12">
+                <p>特别说明：{/$item.comments/}</p>
+            </div>
+        </div>
+    </div>
+    {//foreach/}
+</div>
